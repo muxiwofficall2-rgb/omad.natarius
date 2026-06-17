@@ -1,654 +1,614 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Копицентр Омад</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Raleway:wght@300;400;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
+<meta name="theme-color" content="#04060D"/>
+<title>Копицентр · Омад</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:      #000;
-  --bg2:     #080010;
-  --card:    #0E0020;
-  --cardbor: #3B1060;
-  --cardhov: #1A0038;
-  --purple:  #7B2FBE;
-  --pglow:   #BF7FFF;
-  --white:   #F0E8FF;
-  --grey:    #9B7FBF;
-  --accent:  #A855F7;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-html, body {
-  width:100%; height:100%;
-  background:#000;
-  color:var(--white);
-  font-family:'Raleway',sans-serif;
-  overflow:hidden;
+/* ════════════════════════════════════════
+   RESET & ROOT
+════════════════════════════════════════ */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow-x:hidden}
+
+:root{
+  --bg:#04060D;
+  --surface:rgba(12,18,36,.72);
+  --surface2:rgba(8,12,24,.55);
+  --border:rgba(255,255,255,.06);
+  --border2:rgba(255,255,255,.10);
+  --text:#EDF0F7;
+  --muted:#3D4F6B;
+  --muted2:#222D42;
 }
 
-/* ===== BG ===== */
-.bg {
-  position:fixed; inset:0; z-index:0;
-  background:#000;
-  pointer-events:none; overflow:hidden;
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
 }
-.bg::before {
+
+/* ════════════════════════════════════════
+   DOT GRID BACKGROUND
+════════════════════════════════════════ */
+body::before{
   content:'';
-  position:absolute; inset:0;
-  background:
-    radial-gradient(ellipse 70% 50% at 30% 20%, rgba(80,0,160,0.28) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 75% 75%, rgba(60,0,120,0.2) 0%, transparent 55%);
-}
-.particles { position:absolute; inset:0; }
-.p { position:absolute; border-radius:50%; }
-.pu { animation:goUp   linear infinite; }
-.pd { animation:goDown linear infinite; }
-
-.p1  { width:2px;height:2px;background:#A855F7;left:7%;  bottom:0;  opacity:.6; animation-duration:11s;animation-delay:0s;   }
-.p2  { width:2px;height:2px;background:#BF7FFF;left:16%; bottom:0;  opacity:.4; animation-duration:15s;animation-delay:2s;   }
-.p3  { width:3px;height:3px;background:#fff;   left:26%; bottom:0;  opacity:.25;animation-duration:9s; animation-delay:1s;   }
-.p4  { width:2px;height:2px;background:#A855F7;left:37%; bottom:0;  opacity:.5; animation-duration:13s;animation-delay:4s;   }
-.p5  { width:2px;height:2px;background:#7B2FBE;left:48%; bottom:0;  opacity:.45;animation-duration:17s;animation-delay:0.5s; }
-.p6  { width:3px;height:3px;background:#BF7FFF;left:60%; bottom:0;  opacity:.35;animation-duration:10s;animation-delay:3s;   }
-.p7  { width:2px;height:2px;background:#fff;   left:71%; bottom:0;  opacity:.2; animation-duration:14s;animation-delay:5.5s; }
-.p8  { width:2px;height:2px;background:#A855F7;left:82%; bottom:0;  opacity:.5; animation-duration:12s;animation-delay:1.5s; }
-.p9  { width:2px;height:2px;background:#7B2FBE;left:91%; bottom:0;  opacity:.4; animation-duration:16s;animation-delay:4.5s; }
-.p10 { width:3px;height:3px;background:#BF7FFF;left:4%;  bottom:0;  opacity:.3; animation-duration:18s;animation-delay:7s;   }
-.p11 { width:2px;height:2px;background:#A855F7;left:22%; top:0;     opacity:.3; animation-duration:19s;animation-delay:3s;   }
-.p12 { width:2px;height:2px;background:#fff;   left:44%; top:0;     opacity:.2; animation-duration:13s;animation-delay:8s;   }
-.p13 { width:3px;height:3px;background:#BF7FFF;left:66%; top:0;     opacity:.3; animation-duration:21s;animation-delay:2s;   }
-.p14 { width:2px;height:2px;background:#A855F7;left:79%; top:0;     opacity:.25;animation-duration:15s;animation-delay:6s;   }
-.p15 { width:2px;height:2px;background:#7B2FBE;left:55%; top:0;     opacity:.2; animation-duration:17s;animation-delay:5s;   }
-
-@keyframes goUp   { 0%{transform:translateY(0);opacity:0} 8%{opacity:.5} 92%{opacity:.3} 100%{transform:translateY(-100vh);opacity:0} }
-@keyframes goDown { 0%{transform:translateY(0);opacity:0} 8%{opacity:.4} 92%{opacity:.2} 100%{transform:translateY(100vh);opacity:0}  }
-
-/* ===== APP ===== */
-#app { position:fixed; inset:0; z-index:1; overflow:hidden; }
-
-.screen {
-  position:absolute; inset:0;
-  display:flex; flex-direction:column; align-items:center;
-  overflow-y:auto; overflow-x:hidden;
-  padding:0 16px 50px;
-  transition:transform .38s cubic-bezier(.4,0,.2,1), opacity .38s ease;
-}
-#home { transform:translateX(0); opacity:1; }
-#home.pushed { transform:translateX(-100%); opacity:0; }
-.inner { transform:translateX(100%); opacity:0; pointer-events:none; }
-.inner.active { transform:translateX(0); opacity:1; pointer-events:all; }
-
-/* ===== TOPBAR ===== */
-.topbar {
-  width:100%; max-width:460px;
-  display:flex; align-items:center; justify-content:space-between;
-  padding:16px 0 10px; flex-shrink:0;
-}
-.back-btn {
-  display:flex; align-items:center; gap:6px;
-  padding:8px 14px 8px 10px;
-  border-radius:22px;
-  border:1.5px solid var(--cardbor);
-  background:var(--card);
-  color:var(--white);
-  font-family:'Raleway',sans-serif; font-size:13px; font-weight:700;
-  cursor:pointer; letter-spacing:.3px;
-  transition:background .2s,border-color .2s,box-shadow .2s;
-}
-.back-btn:hover {
-  background:var(--cardhov); border-color:var(--pglow);
-  box-shadow:0 0 12px rgba(168,85,247,.35);
-}
-.lang-row { display:flex; gap:7px; }
-.lang-btn {
-  display:flex; align-items:center; gap:5px;
-  padding:7px 12px; border-radius:22px;
-  border:1.5px solid var(--cardbor);
-  background:var(--card); color:var(--white);
-  font-family:'Raleway',sans-serif; font-size:12px; font-weight:700;
-  cursor:pointer; transition:all .2s;
-}
-.lang-btn.active,.lang-btn:hover {
-  background:var(--cardhov); border-color:var(--pglow);
-  box-shadow:0 0 10px rgba(168,85,247,.4);
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:radial-gradient(circle,rgba(255,255,255,.045) 1px,transparent 1px);
+  background-size:28px 28px;
+  mask-image:radial-gradient(ellipse 80% 90% at 50% 50%,black 30%,transparent 100%);
+  -webkit-mask-image:radial-gradient(ellipse 80% 90% at 50% 50%,black 30%,transparent 100%);
 }
 
-/* ===== LOGO ===== */
-.logo-wrap {
-  text-align:center; margin:16px 0 6px;
-  animation:fadeDown .8s ease both;
-  width:100%; max-width:460px; flex-shrink:0;
+/* single centered glow — one bold choice */
+body::after{
+  content:'';
+  position:fixed;
+  width:700px;height:460px;
+  top:50%;left:50%;
+  transform:translate(-50%,-58%);
+  background:radial-gradient(ellipse,rgba(30,64,175,.18) 0%,transparent 68%);
+  filter:blur(60px);
+  z-index:0;pointer-events:none;
 }
-@keyframes fadeDown { from{opacity:0;transform:translateY(-22px)} to{opacity:1;transform:translateY(0)} }
-.logo-eyebrow { font-size:10px; letter-spacing:5px; color:var(--pglow); text-transform:uppercase; margin-bottom:6px; opacity:.75; }
-.logo-name {
-  font-family:'Playfair Display',serif;
-  font-size:clamp(28px,8vw,48px); font-weight:900; line-height:1.05;
-  background:linear-gradient(130deg,#fff 0%,#D8A8FF 45%,#A855F7 100%);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-}
-.logo-tag { font-size:11px; letter-spacing:3px; color:var(--grey); text-transform:uppercase; margin-top:5px; }
-.logo-rule {
-  width:70px; height:1.5px; margin:10px auto 0;
-  background:linear-gradient(90deg,transparent,var(--accent),transparent);
-  animation:ruleAnim 3s ease-in-out infinite;
-}
-@keyframes ruleAnim { 0%,100%{width:50px;opacity:.4} 50%{width:130px;opacity:1} }
 
-.sec-label { font-size:10px; letter-spacing:5px; color:var(--pglow); text-transform:uppercase; opacity:.7; margin:22px 0 12px; flex-shrink:0; }
-
-/* ===== HOME CARDS ===== */
-.home-list {
-  width:100%; max-width:460px;
-  display:flex; flex-direction:column; gap:10px;
-  animation:fadeUp .8s ease .2s both; flex-shrink:0;
+/* ════════════════════════════════════════
+   APP SHELL
+════════════════════════════════════════ */
+.app{
+  position:relative;z-index:2;
+  width:100%;max-width:420px;
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  padding-bottom:60px;
 }
-@keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
 
-.home-card {
-  display:flex; align-items:center; gap:14px;
-  padding:15px 16px; border-radius:14px;
-  border:1.5px solid var(--cardbor);
-  background:var(--card);
-  cursor:pointer; text-decoration:none; color:var(--white);
-  transition:background .22s,border-color .22s,transform .18s,box-shadow .22s;
+/* ════════════════════════════════════════
+   SCREENS
+════════════════════════════════════════ */
+.screen{display:none;flex-direction:column;}
+.screen.active{display:flex;}
+
+/* ════════════════════════════════════════
+   HEADER / HERO
+════════════════════════════════════════ */
+.hero{
+  padding:56px 24px 40px;
+  display:flex;flex-direction:column;
+  align-items:flex-start;
 }
-.home-card:hover {
-  background:var(--cardhov); border-color:var(--pglow);
-  box-shadow:0 4px 24px rgba(80,0,160,.5),0 0 16px rgba(168,85,247,.25);
+
+.hero-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(30,64,175,.14);
+  border:1px solid rgba(59,130,246,.22);
+  border-radius:100px;
+  padding:5px 13px 5px 9px;
+  margin-bottom:24px;
+  opacity:0;animation:fadeUp .55s ease .05s forwards;
+}
+.hero-badge-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:#3B82F6;
+  box-shadow:0 0 0 3px rgba(59,130,246,.2);
+  animation:breathe 2s ease-in-out infinite;
+}
+@keyframes breathe{0%,100%{box-shadow:0 0 0 3px rgba(59,130,246,.2)}50%{box-shadow:0 0 0 5px rgba(59,130,246,.06)}}
+.hero-badge span{font-size:11px;font-weight:500;letter-spacing:.5px;color:#93AFDB;}
+
+.hero h1{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:38px;font-weight:700;
+  letter-spacing:-1px;line-height:1.08;
+  color:#EDF0F7;
+  margin-bottom:12px;
+  opacity:0;animation:fadeUp .55s ease .12s forwards;
+}
+.hero h1 em{
+  font-style:normal;
+  background:linear-gradient(105deg,#60A5FA,#A78BFA);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+
+.hero p{
+  font-size:14px;line-height:1.6;
+  color:var(--muted);
+  max-width:300px;
+  opacity:0;animation:fadeUp .55s ease .20s forwards;
+}
+
+/* ════════════════════════════════════════
+   SECTION LABEL
+════════════════════════════════════════ */
+.label{
+  padding:0 20px 14px;
+  font-size:10px;letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--muted2);font-weight:500;
+  opacity:0;animation:fadeUp .5s ease .28s forwards;
+}
+
+/* ════════════════════════════════════════
+   CONTACT GRID  (2 × 3)
+════════════════════════════════════════ */
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  padding:0 14px;
+}
+
+.ccard{
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;align-items:flex-start;
+  padding:20px 18px 18px;
+  border-radius:18px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  backdrop-filter:blur(20px) saturate(140%);
+  -webkit-backdrop-filter:blur(20px) saturate(140%);
+  text-decoration:none;color:var(--text);
+  cursor:pointer;font-family:inherit;
+  opacity:0;
+  transition:transform .18s ease,border-color .22s ease,background .22s ease;
+}
+
+/* colored top accent — THE signature element */
+.ccard::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:1.5px;
+  background:var(--stripe,linear-gradient(90deg,transparent,#3B82F6,transparent));
+  opacity:.7;
+  transition:opacity .25s ease;
+}
+.ccard:hover::before{opacity:1;}
+
+/* inner highlight */
+.ccard::after{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(160deg,rgba(255,255,255,.045) 0%,transparent 50%);
+  pointer-events:none;
+  border-radius:18px;
+}
+
+.ccard:hover{
+  border-color:var(--border2);
+  background:rgba(14,22,44,.78);
   transform:translateY(-2px);
 }
-.home-card:active { transform:scale(.97); }
+.ccard:active{transform:scale(.96) translateY(0);}
 
-.hc-icon {
-  width:44px; height:44px; border-radius:12px;
-  background:var(--bg2); border:1.5px solid var(--cardbor);
-  display:flex; align-items:center; justify-content:center; flex-shrink:0;
-}
-.hc-icon svg { width:22px; height:22px; }
-.hc-info { flex:1; min-width:0; }
-.hc-title { font-family:'Playfair Display',serif; font-size:15px; font-weight:700; color:var(--white); }
-.hc-sub { font-size:12px; color:var(--grey); margin-top:2px; }
-.hc-chev { opacity:.3; flex-shrink:0; transition:opacity .2s,transform .2s; }
-.home-card:hover .hc-chev { opacity:.8; transform:translateX(3px); }
+.ccard.in{animation:cardIn .5s cubic-bezier(.22,1,.36,1) both;}
+@keyframes cardIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-/* ===== INNER ===== */
-.inner-wrap { width:100%; max-width:460px; flex:1; display:flex; flex-direction:column; }
-.screen-head { text-align:center; margin:10px 0 20px; }
-.screen-title { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:var(--white); }
-.screen-sub { font-size:11px; letter-spacing:3px; color:var(--grey); text-transform:uppercase; margin-top:4px; }
+.cico{
+  width:40px;height:40px;
+  margin-bottom:16px;
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--ico-bg,rgba(59,130,246,.12));
+  border:1px solid var(--ico-bd,rgba(59,130,246,.18));
+}
+.cico svg{width:22px;height:22px;display:block;}
 
-.item-list { display:flex; flex-direction:column; gap:10px; }
+.cname{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:15px;font-weight:600;
+  color:#EDF0F7;line-height:1;
+  margin-bottom:4px;
+}
+.csub{font-size:11px;color:var(--muted);line-height:1.3;font-weight:400;}
 
-.item-btn {
-  display:flex; align-items:center; gap:14px;
-  padding:16px 16px; border-radius:14px;
-  border:1.5px solid var(--cardbor);
-  background:var(--card); color:var(--white); text-decoration:none;
-  font-size:15px; font-weight:600; cursor:pointer;
-  transition:background .22s,border-color .22s,transform .18s,box-shadow .22s;
+/* ════════════════════════════════════════
+   SUB SCREENS — TOP BAR
+════════════════════════════════════════ */
+.topbar{
+  display:flex;align-items:center;gap:14px;
+  padding:52px 18px 30px;
 }
-.item-btn:hover {
-  background:var(--cardhov); border-color:var(--pglow);
-  box-shadow:0 4px 20px rgba(80,0,160,.5),0 0 14px rgba(168,85,247,.2);
-  transform:translateX(5px);
+.back-btn{
+  width:40px;height:40px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:12px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  cursor:pointer;color:#5A6A85;
+  transition:color .2s,border-color .2s,transform .15s;
 }
-.item-btn:active { transform:scale(.97); }
+.back-btn:hover{border-color:var(--border2);color:#93AFDB;}
+.back-btn:active{transform:scale(.9);}
+.back-btn svg{width:18px;height:18px;display:block;}
 
-.ib-icon {
-  width:44px; height:44px; border-radius:12px;
-  background:var(--bg2); border:1.5px solid var(--cardbor);
-  display:flex; align-items:center; justify-content:center;
-  font-size:20px; flex-shrink:0;
-}
-.ib-info { flex:1; min-width:0; }
-.ib-name { font-size:15px; font-weight:700; color:var(--white); }
-.ib-handle { font-size:12px; color:var(--pglow); margin-top:3px; }
-.ib-num {
-  font-size:10px; font-weight:700;
-  background:var(--bg2); border:1px solid var(--cardbor);
-  color:var(--grey); padding:3px 9px; border-radius:20px; flex-shrink:0;
-}
-.ib-chev { opacity:.3; flex-shrink:0; transition:opacity .2s,transform .2s; }
-.item-btn:hover .ib-chev { opacity:.7; transform:translateX(3px); }
-
-/* ===== ADDRESS ===== */
-.addr-card {
-  background:var(--card); border:1.5px solid var(--cardbor);
-  border-radius:14px; padding:22px 18px;
-  text-align:center; margin-bottom:12px;
-}
-.addr-line { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:var(--white); line-height:1.7; }
-.dom-row {
-  display:inline-flex; align-items:center; gap:8px;
-  margin-top:14px; padding:10px 18px;
-  border-radius:10px; background:var(--bg2); border:1.5px solid var(--cardbor);
-}
-.dot { width:9px; height:9px; border-radius:50%; animation:blink 1.1s ease-in-out infinite alternate; }
-.dot1 { background:var(--accent); animation-delay:0s; }
-.dot2 { background:#fff;          animation-delay:.35s; }
-.dot3 { background:var(--pglow);  animation-delay:.7s; }
-@keyframes blink { from{opacity:.15;box-shadow:0 0 3px currentColor} to{opacity:1;box-shadow:0 0 10px currentColor} }
-.dom-lbl { font-size:12px; color:var(--grey); margin:0 4px; }
-.dom-code { font-family:'Playfair Display',serif; font-size:24px; font-weight:900; color:var(--pglow); letter-spacing:3px; }
-
-/* ===== MAIL ===== */
-.mail-addr {
-  background:var(--card); border:1.5px solid var(--cardbor);
-  border-radius:12px; padding:13px 16px;
-  text-align:center; color:var(--pglow);
-  font-size:14px; font-weight:700; letter-spacing:.5px;
-  margin-bottom:14px; word-break:break-all;
+.topbar-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:18px;font-weight:600;letter-spacing:4px;
+  color:#9BAACB;
 }
 
-/* ===== FOOTER ===== */
-.footer { flex-shrink:0; margin-top:28px; text-align:center; font-size:10px; color:rgba(120,80,180,.3); letter-spacing:2px; }
+/* ════════════════════════════════════════
+   EMAIL CHIP
+════════════════════════════════════════ */
+.echip{
+  margin:0 14px 20px;
+  padding:14px 18px;
+  border-radius:14px;
+  background:rgba(14,22,44,.6);
+  border:1px solid rgba(59,130,246,.14);
+  display:flex;align-items:center;gap:12px;
+  backdrop-filter:blur(16px);
+}
+.echip-ico{
+  width:36px;height:36px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:10px;
+  background:rgba(99,102,241,.1);
+  border:1px solid rgba(99,102,241,.18);
+}
+.echip-ico svg{width:18px;height:18px;}
+.echip-info{display:flex;flex-direction:column;gap:2px;}
+.echip-label{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
+.echip-val{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:500;color:#C7D2FE;letter-spacing:.3px;}
+
+/* ════════════════════════════════════════
+   ADDRESS CARD
+════════════════════════════════════════ */
+.acard{
+  margin:0 14px 20px;
+  padding:20px;
+  border-radius:16px;
+  background:rgba(14,22,44,.6);
+  border:1px solid rgba(255,255,255,.06);
+  backdrop-filter:blur(16px);
+  position:relative;overflow:hidden;
+}
+.acard::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1.5px;
+  background:linear-gradient(90deg,transparent,#A855F7,#EC4899,transparent);
+  opacity:.6;
+}
+.acity{font-size:10px;letter-spacing:2.5px;color:var(--muted2);text-transform:uppercase;margin-bottom:10px;}
+.astreet{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:18px;font-weight:600;line-height:1.5;
+  background:linear-gradient(110deg,#CBD5E1 20%,#E2E8F0 45%,#94A3B8 70%);
+  background-size:200% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:shim 6s linear infinite;
+}
+@keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.adom{margin-top:6px;font-size:13px;color:var(--muted);}
+
+/* ════════════════════════════════════════
+   LIST ROWS
+════════════════════════════════════════ */
+.rlist{
+  display:flex;flex-direction:column;
+  gap:8px;
+  padding:0 14px;
+}
+
+.rrow{
+  display:flex;align-items:center;gap:14px;
+  padding:15px 16px;
+  border-radius:16px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  backdrop-filter:blur(16px);
+  text-decoration:none;color:var(--text);
+  opacity:0;
+  transition:border-color .2s,background .2s,transform .16s;
+  position:relative;overflow:hidden;
+}
+.rrow::before{
+  content:'';position:absolute;
+  left:0;top:12px;bottom:12px;width:2px;border-radius:2px;
+  background:var(--rc,#3B82F6);opacity:0;
+  transition:opacity .25s ease;
+}
+.rrow:hover::before{opacity:.7;}
+.rrow:hover{border-color:var(--border2);background:rgba(12,18,36,.8);}
+.rrow:active{transform:scale(.975);}
+.rrow.in{animation:cardIn .46s cubic-bezier(.22,1,.36,1) both;}
+
+.rico-wrap{
+  width:44px;height:44px;flex-shrink:0;
+  border-radius:13px;overflow:hidden;
+}
+.rico-wrap svg{display:block;width:100%;height:100%;}
+
+.rinfo{flex:1;}
+.rinfo strong{display:block;font-size:15px;font-weight:600;color:#EDF0F7;}
+.rinfo small{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;}
+
+.rarrow{
+  width:28px;height:28px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:8px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+}
+.rarrow svg{width:14px;height:14px;color:#3D4F6B;}
+
+/* ════════════════════════════════════════
+   ANIMATIONS
+════════════════════════════════════════ */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:translateY(0)}
+}
 </style>
 </head>
 <body>
 
-<div class="bg">
-  <div class="particles">
-    <div class="p p1 pu"></div><div class="p p2 pu"></div><div class="p p3 pu"></div>
-    <div class="p p4 pu"></div><div class="p p5 pu"></div><div class="p p6 pu"></div>
-    <div class="p p7 pu"></div><div class="p p8 pu"></div><div class="p p9 pu"></div>
-    <div class="p p10 pu"></div>
-    <div class="p p11 pd"></div><div class="p p12 pd"></div><div class="p p13 pd"></div>
-    <div class="p p14 pd"></div><div class="p p15 pd"></div>
-  </div>
-</div>
+<div class="app">
 
-<div id="app">
+<!-- ═══════════════════════════════
+     HOME SCREEN
+═══════════════════════════════ -->
+<section class="screen active" id="home">
 
-  <!-- HOME -->
-  <div class="screen" id="home">
-    <div class="topbar">
-      <div style="width:80px"></div>
-      <div class="lang-row">
-        <button class="lang-btn active" id="lru" onclick="setLang('ru')">🇷🇺 РУС</button>
-        <button class="lang-btn"        id="luz" onclick="setLang('uz')">🇺🇿 УЗБ</button>
-      </div>
+  <div class="hero">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      <span>Санкт-Петербург · Открыто</span>
     </div>
-    <div class="logo-wrap">
-      <div class="logo-eyebrow" id="leyebrow">КОПИ · ПРИНТ · ДОКУМЕНТЫ</div>
-      <div class="logo-name">КОПИЦЕНТР ОМАД</div>
-      <div class="logo-tag" id="ltag">Ваш надёжный партнёр</div>
-      <div class="logo-rule"></div>
-    </div>
-    <div class="sec-label" id="lsec">— КОНТАКТЫ —</div>
-    <div class="home-list">
-
-      <div class="home-card" onclick="goTo('s-tg')">
-        <div class="hc-icon">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.96 9.23c-.14.64-.52.8-.96.5l-2.66-1.96-1.28 1.23c-.14.14-.26.26-.54.26l.19-2.72 4.94-4.46c.21-.19-.05-.29-.33-.1L7.58 14.3l-2.61-.82c-.57-.18-.58-.57.12-.84l10.21-3.94c.47-.18.88.11.72.84z" fill="#A855F7"/></svg>
-        </div>
-        <div class="hc-info">
-          <div class="hc-title" id="htg">Telegram</div>
-          <div class="hc-sub" id="htg-s">2 канала</div>
-        </div>
-        <svg class="hc-chev" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-      </div>
-
-      <div class="home-card" onclick="goTo('s-wa')">
-        <div class="hc-icon">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.37 5.06L2 22l5.09-1.34A9.9 9.9 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm4.93 13.57c-.2.56-1.18 1.1-1.63 1.16-.42.06-.95.08-1.53-.1-.35-.11-.8-.26-1.38-.51-2.42-1.04-4-3.48-4.12-3.64-.12-.16-.97-1.29-.97-2.46s.62-1.75.84-1.99c.22-.24.48-.3.64-.3.16 0 .32 0 .46.01.15 0 .35-.06.55.42.2.48.68 1.66.74 1.78.06.12.1.26.02.42-.08.16-.12.26-.24.4l-.36.42c-.12.12-.24.25-.1.49.14.24.62.97 1.33 1.57.91.81 1.68 1.06 1.92 1.18.24.12.38.1.52-.06.14-.16.6-.7.76-.94.16-.24.32-.2.54-.12.22.08 1.4.66 1.64.78.24.12.4.18.46.28.06.1.06.58-.14 1.14z" fill="#A855F7"/></svg>
-        </div>
-        <div class="hc-info">
-          <div class="hc-title">WhatsApp</div>
-          <div class="hc-sub" id="hwa-s">2 номера</div>
-        </div>
-        <svg class="hc-chev" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-      </div>
-
-      <a class="home-card" href="https://max.ru/u/f9LHodD0cOIFDpk840lRKSMGRrogXIom-KTHgKcrqyRGjBP5y3YL4PDMWu0" target="_blank">
-        <div class="hc-icon">
-          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#A855F7" stroke-width="1.6"/><path d="M8.5 12l2.5 2.5L15.5 9" stroke="#A855F7" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="hc-info">
-          <div class="hc-title" id="hmax">MAX · ВКонтакте</div>
-          <div class="hc-sub" id="hmax-s">Написать в MAX</div>
-        </div>
-        <svg class="hc-chev" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-      </a>
-
-      <div class="home-card" onclick="goTo('s-mail')">
-        <div class="hc-icon">
-          <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="3" stroke="#A855F7" stroke-width="1.6"/><path d="M2 8l10 6 10-6" stroke="#A855F7" stroke-width="1.6"/></svg>
-        </div>
-        <div class="hc-info">
-          <div class="hc-title" id="hmail">Почта · E-mail</div>
-          <div class="hc-sub">kopitsentr.omad@bk.ru</div>
-        </div>
-        <svg class="hc-chev" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-      </div>
-
-      <div class="home-card" onclick="goTo('s-loc')">
-        <div class="hc-icon">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="#A855F7" stroke-width="1.6"/><circle cx="12" cy="9" r="2.5" stroke="#A855F7" stroke-width="1.6"/></svg>
-        </div>
-        <div class="hc-info">
-          <div class="hc-title" id="hloc">Адрес · Карта</div>
-          <div class="hc-sub" id="hloc-s">4-я Красноармейская, д. 3</div>
-        </div>
-        <svg class="hc-chev" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-      </div>
-
-    </div>
-    <div class="footer">© 2025 Копицентр Омад</div>
+    <h1>Копи<em>центр</em></h1>
+    <p>Печать, копирование и сканирование документов. Выберите удобный способ связи.</p>
   </div>
 
-  <!-- TELEGRAM -->
-  <div class="screen inner" id="s-tg">
-    <div class="topbar">
-      <button class="back-btn" onclick="goBack()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span id="btg-back">Назад</span>
-      </button>
-      <div class="lang-row">
-        <button class="lang-btn active" id="lru-tg" onclick="setLang('ru')">🇷🇺</button>
-        <button class="lang-btn"        id="luz-tg" onclick="setLang('uz')">🇺🇿</button>
+  <div class="label">Контакты</div>
+
+  <div class="grid">
+
+    <!-- Telegram -->
+    <a class="ccard" href="https://t.me/OMAD_TOUR9094"
+       style="--stripe:linear-gradient(90deg,transparent,#37BBFE,transparent);
+              --ico-bg:rgba(55,187,254,.10);--ico-bd:rgba(55,187,254,.18);">
+      <div class="cico">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#37BBFE"/><path fill="#fff" d="M5.3 11.8 16.5 7.4c.6-.2 1.1.3.8 1l-1.9 8.7c-.1.7-.6.8-1.2.5l-3.2-2.4-1.6 1.5c-.2.1-.3.2-.7.2l.3-3.3 6-5.4c.3-.2 0-.3-.4-.1l-7.4 4.7-3.2-1c-.7-.2-.7-.6.2-1z"/></svg>
       </div>
-    </div>
-    <div class="inner-wrap">
-      <div class="screen-head">
-        <div class="screen-title" id="tg-title">Telegram</div>
-        <div class="screen-sub" id="tg-sub">Выберите канал</div>
+      <div class="cname">Telegram</div>
+      <div class="csub">@OMAD_TOUR9094</div>
+    </a>
+
+    <!-- WhatsApp -->
+    <a class="ccard" href="https://wa.me/79811939094"
+       style="--stripe:linear-gradient(90deg,transparent,#25D366,transparent);
+              --ico-bg:rgba(37,211,102,.10);--ico-bd:rgba(37,211,102,.18);">
+      <div class="cico">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#25D366"/><path fill="#fff" d="M12 6.3a5.7 5.7 0 0 0-5.7 5.7c0 1 .28 2 .8 2.9L6 18l3.1-.8c.85.46 1.8.7 2.9.7 3.14 0 5.7-2.55 5.7-5.7S15.14 6.3 12 6.3zm0 .9a4.8 4.8 0 0 1 4.8 4.8 4.8 4.8 0 0 1-4.8 4.8c-.87 0-1.7-.23-2.4-.65l-.3-.15-1.77.5.48-1.74-.15-.3A4.73 4.73 0 0 1 7.2 12a4.8 4.8 0 0 1 4.8-4.8z"/><path fill="#fff" d="M9.85 9.5c-.14-.3-.3-.3-.44-.3h-.35c-.14 0-.35.05-.52.25S8 10 8 10.9c0 .9.63 1.74.73 1.85.1.12 1.14 1.8 2.82 2.5 1.4.5 1.64.44 1.93.4.3-.05.95-.4 1.09-.75.14-.35.14-.66.1-.73-.05-.07-.18-.1-.38-.2s-1-.46-1.1-.5c-.14-.06-.25-.1-.38.1-.1.15-.44.5-.55.6-.1.1-.2.1-.36.04-.2-.1-.74-.3-1.25-.8-.47-.5-.78-.98-.88-1.14-.1-.15 0-.24.07-.3l.25-.35c.1-.1.1-.2.05-.3L9.85 9.5z"/></svg>
       </div>
-      <div class="item-list">
-        <a class="item-btn" href="https://t.me/AVIAKASSA9094" target="_blank">
-          <div class="ib-icon">✈️</div>
-          <div class="ib-info">
-            <div class="ib-name" id="tg-n1">Копицентр Омад</div>
-            <div class="ib-handle">@AVIAKASSA9094</div>
-          </div>
-          <span class="ib-num">01</span>
-        </a>
-        <a class="item-btn" href="https://t.me/OMAD_TOUR9094" target="_blank">
-          <div class="ib-icon">🌍</div>
-          <div class="ib-info">
-            <div class="ib-name" id="tg-n2">Копицентр Омад</div>
-            <div class="ib-handle">@OMAD_TOUR9094</div>
-          </div>
-          <span class="ib-num">02</span>
-        </a>
+      <div class="cname">WhatsApp</div>
+      <div class="csub">+7 981 193-90-94</div>
+    </a>
+
+    <!-- MAX -->
+    <a class="ccard" href="https://max.ru/u/f9LHodD0cOK9n8SoDUmiSwL3ZdPoLfXFUMcRyl3zgviGR9Z2ZIpgFOK3NmY"
+       style="--stripe:linear-gradient(90deg,transparent,#7C5CFC,transparent);
+              --ico-bg:rgba(124,92,252,.10);--ico-bd:rgba(124,92,252,.18);">
+      <div class="cico">
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect width="24" height="24" rx="7" fill="url(#mx2)"/>
+          <defs><linearGradient id="mx2" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#1FA2FF"/><stop offset="1" stop-color="#9747FF"/></linearGradient></defs>
+          <path fill="#fff" d="M12 4.5C7.86 4.5 4.5 7.86 4.5 12c0 1.4.38 2.73 1.05 3.87l-.7 2.63.07.04 2.56-.92A7.46 7.46 0 0 0 12 19.5c4.14 0 7.5-3.36 7.5-7.5S16.14 4.5 12 4.5z"/>
+          <circle cx="12" cy="12" r="4" fill="url(#mx2)"/>
+        </svg>
       </div>
-    </div>
+      <div class="cname">MAX</div>
+      <div class="csub">ВК Мессенджер</div>
+    </a>
+
+    <!-- imo -->
+    <a class="ccard" href="https://s.imoim.net/c5zW2V"
+       style="--stripe:linear-gradient(90deg,transparent,#06B6D4,transparent);
+              --ico-bg:rgba(6,182,212,.10);--ico-bd:rgba(6,182,212,.18);">
+      <div class="cico">
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect width="24" height="24" rx="7" fill="url(#im2)"/>
+          <defs><linearGradient id="im2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#06B6D4"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs>
+          <path fill="#fff" d="M5.5 7h13a1.5 1.5 0 0 1 1.5 1.5v7A1.5 1.5 0 0 1 18.5 17H11l-3 2.5V17H5.5A1.5 1.5 0 0 1 4 15.5v-7A1.5 1.5 0 0 1 5.5 7z"/>
+          <circle cx="9" cy="12" r="1.1" fill="rgba(7,89,133,.6)"/>
+          <circle cx="12" cy="12" r="1.1" fill="rgba(7,89,133,.6)"/>
+          <circle cx="15" cy="12" r="1.1" fill="rgba(7,89,133,.6)"/>
+        </svg>
+      </div>
+      <div class="cname">imo</div>
+      <div class="csub">Написать сейчас</div>
+    </a>
+
+    <!-- Почта -->
+    <button class="ccard" data-to="email" type="button"
+       style="--stripe:linear-gradient(90deg,transparent,#818CF8,transparent);
+              --ico-bg:rgba(129,140,248,.10);--ico-bd:rgba(129,140,248,.18);">
+      <div class="cico">
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect width="24" height="24" rx="7" fill="url(#ml2)"/>
+          <defs><linearGradient id="ml2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366F1"/><stop offset="1" stop-color="#A855F7"/></linearGradient></defs>
+          <rect x="4" y="7" width="16" height="10" rx="2" fill="none" stroke="#fff" stroke-width="1.3"/>
+          <path d="M4.5 7.5 12 13 19.5 7.5" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="cname">Почта</div>
+      <div class="csub">omadru@bk.ru</div>
+    </button>
+
+    <!-- Адрес -->
+    <button class="ccard" data-to="address" type="button"
+       style="--stripe:linear-gradient(90deg,transparent,#EC4899,transparent);
+              --ico-bg:rgba(236,72,153,.10);--ico-bd:rgba(236,72,153,.18);">
+      <div class="cico">
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect width="24" height="24" rx="7" fill="url(#pi2)"/>
+          <defs><linearGradient id="pi2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A855F7"/><stop offset="1" stop-color="#EC4899"/></linearGradient></defs>
+          <path fill="#fff" d="M12 4a5 5 0 0 0-5 5c0 3.5 4.17 7.7 4.65 8.15a.48.48 0 0 0 .7 0C12.83 16.7 17 12.5 17 9a5 5 0 0 0-5-5zm0 6.75a1.75 1.75 0 1 1 0-3.5 1.75 1.75 0 0 1 0 3.5z"/>
+        </svg>
+      </div>
+      <div class="cname">Адрес</div>
+      <div class="csub">4-я Красноармейская</div>
+    </button>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════
+     ПОЧТА SCREEN
+═══════════════════════════════ -->
+<section class="screen" id="email">
+
+  <div class="topbar">
+    <button class="back-btn" data-back type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="topbar-title">ПОЧТА</div>
   </div>
 
-  <!-- WHATSAPP -->
-  <div class="screen inner" id="s-wa">
-    <div class="topbar">
-      <button class="back-btn" onclick="goBack()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span id="bwa-back">Назад</span>
-      </button>
-      <div class="lang-row">
-        <button class="lang-btn active" id="lru-wa" onclick="setLang('ru')">🇷🇺</button>
-        <button class="lang-btn"        id="luz-wa" onclick="setLang('uz')">🇺🇿</button>
-      </div>
+  <div class="echip">
+    <div class="echip-ico">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="2.5" stroke="#818CF8" stroke-width="1.5"/><path d="M2.5 5.5 12 13 21.5 5.5" stroke="#818CF8" stroke-width="1.5" stroke-linecap="round"/></svg>
     </div>
-    <div class="inner-wrap">
-      <div class="screen-head">
-        <div class="screen-title">WhatsApp</div>
-        <div class="screen-sub" id="wa-sub">Выберите номер</div>
-      </div>
-      <div class="item-list">
-        <a class="item-btn" href="https://wa.me/79379499094" target="_blank">
-          <div class="ib-icon">📱</div>
-          <div class="ib-info">
-            <div class="ib-name" id="wa-n1">Копицентр Омад</div>
-            <div class="ib-handle">+7 937 949-90-94</div>
-          </div>
-          <span class="ib-num">01</span>
-        </a>
-        <a class="item-btn" href="https://wa.me/79811939094" target="_blank">
-          <div class="ib-icon">📱</div>
-          <div class="ib-info">
-            <div class="ib-name" id="wa-n2">Копицентр Омад</div>
-            <div class="ib-handle">+7 981 193-90-94</div>
-          </div>
-          <span class="ib-num">02</span>
-        </a>
-      </div>
+    <div class="echip-info">
+      <div class="echip-label">Электронная почта</div>
+      <div class="echip-val">omadru@bk.ru</div>
     </div>
   </div>
 
-  <!-- EMAIL -->
-  <div class="screen inner" id="s-mail">
-    <div class="topbar">
-      <button class="back-btn" onclick="goBack()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span id="bmail-back">Назад</span>
-      </button>
-      <div class="lang-row">
-        <button class="lang-btn active" id="lru-mail" onclick="setLang('ru')">🇷🇺</button>
-        <button class="lang-btn"        id="luz-mail" onclick="setLang('uz')">🇺🇿</button>
+  <div class="rlist">
+
+    <a class="rrow" href="https://mail.google.com/mail/?view=cm&fs=1&to=omadru@bk.ru" style="--rc:#EA4335">
+      <div class="rico-wrap">
+        <svg viewBox="0 0 48 48"><rect width="48" height="48" rx="12" fill="#fff"/><path fill="#EA4335" d="M10 14a3 3 0 0 1 3-3h22a3 3 0 0 1 3 3v2.5L24 26 10 16.5z"/><path fill="#4285F4" d="M10 16.5V34a1 1 0 0 0 1 1h4V20z"/><path fill="#34A853" d="M38 16.5V34a1 1 0 0 1-1 1h-4V20z"/><path fill="#FBBC05" d="M15 35h18V20l-9 7-9-7z"/></svg>
       </div>
-    </div>
-    <div class="inner-wrap">
-      <div class="screen-head">
-        <div class="screen-title" id="mail-title">Написать нам</div>
-        <div class="screen-sub" id="mail-sub">Выберите сервис</div>
+      <div class="rinfo">
+        <strong>Gmail</strong>
+        <small>Написать через Gmail</small>
       </div>
-      <div class="mail-addr">kopitsentr.omad@bk.ru</div>
-      <div class="item-list">
+      <div class="rarrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+    </a>
 
-        <!-- Mail.ru: deep link → app, fallback App Store -->
-        <a class="item-btn" id="mailru-btn" href="#">
-          <div class="ib-icon">📧</div>
-          <div class="ib-info">
-            <div class="ib-name" id="ml-mailru">Mail.ru</div>
-            <div class="ib-handle" id="ml-mailru-s">Открыть приложение</div>
-          </div>
-          <svg class="ib-chev" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-        </a>
-
-        <!-- Gmail: intent opens Gmail app on Android; on iOS googlegmail:// -->
-        <a class="item-btn" id="gmail-btn" href="#">
-          <div class="ib-icon">📬</div>
-          <div class="ib-info">
-            <div class="ib-name" id="ml-gmail">Gmail</div>
-            <div class="ib-handle" id="ml-gmail-s">Открыть приложение</div>
-          </div>
-          <svg class="ib-chev" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-        </a>
-
-        <!-- Apple Mail: mailto: -->
-        <a class="item-btn" href="mailto:kopitsentr.omad@bk.ru">
-          <div class="ib-icon">🍎</div>
-          <div class="ib-info">
-            <div class="ib-name" id="ml-apple">Apple Mail</div>
-            <div class="ib-handle" id="ml-apple-s">Открыть приложение</div>
-          </div>
-          <svg class="ib-chev" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-        </a>
-
+    <a class="rrow" href="https://e.mail.ru/compose/?mailto=omadru@bk.ru" style="--rc:#168DE2">
+      <div class="rico-wrap">
+        <svg viewBox="0 0 48 48"><defs><linearGradient id="mr3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#168DE2"/><stop offset="1" stop-color="#0B5FC0"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#mr3)"/><text x="24" y="32" font-size="22" font-weight="800" font-family="Arial,sans-serif" fill="#fff" text-anchor="middle">@</text></svg>
       </div>
-    </div>
+      <div class="rinfo">
+        <strong>Почта Mail.ru</strong>
+        <small>Написать через Mail.ru / BK.ru</small>
+      </div>
+      <div class="rarrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+    </a>
+
+    <a class="rrow" href="mailto:omadru@bk.ru" style="--rc:#818CF8">
+      <div class="rico-wrap">
+        <svg viewBox="0 0 48 48"><defs><linearGradient id="am3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#818CF8"/><stop offset="1" stop-color="#A78BFA"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="#EEF2FF"/><rect x="9" y="13" width="30" height="22" rx="3.5" fill="#fff" stroke="#E2E8F0"/><path d="M9.5 14 24 25 38.5 14" fill="none" stroke="url(#am3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="rinfo">
+        <strong>Apple Mail</strong>
+        <small>Открыть в приложении Почта</small>
+      </div>
+      <div class="rarrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════
+     АДРЕС SCREEN
+═══════════════════════════════ -->
+<section class="screen" id="address">
+
+  <div class="topbar">
+    <button class="back-btn" data-back type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="topbar-title">АДРЕС</div>
   </div>
 
-  <!-- LOCATION -->
-  <div class="screen inner" id="s-loc">
-    <div class="topbar">
-      <button class="back-btn" onclick="goBack()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span id="bloc-back">Назад</span>
-      </button>
-      <div class="lang-row">
-        <button class="lang-btn active" id="lru-loc" onclick="setLang('ru')">🇷🇺</button>
-        <button class="lang-btn"        id="luz-loc" onclick="setLang('uz')">🇺🇿</button>
-      </div>
-    </div>
-    <div class="inner-wrap">
-      <div class="screen-head">
-        <div class="screen-title" id="loc-title">Наш адрес</div>
-        <div class="screen-sub" id="loc-sub">Как нас найти</div>
-      </div>
-      <div class="addr-card">
-        <div class="addr-line">4-я Красноармейская</div>
-        <div class="addr-line">дом 3</div>
-        <div class="dom-row">
-          <span class="dot dot1"></span>
-          <span class="dot dot2"></span>
-          <span class="dot dot3"></span>
-          <span class="dom-lbl" id="dom-lbl">Домофон:</span>
-          <span class="dom-code">22В</span>
-        </div>
-      </div>
-      <div class="item-list">
-        <a class="item-btn" href="https://yandex.ru/maps/-/CLaRUCPW" target="_blank">
-          <div class="ib-icon">🗺️</div>
-          <div class="ib-info">
-            <div class="ib-name">Яндекс Карты</div>
-            <div class="ib-handle" id="ytap">Открыть</div>
-          </div>
-          <svg class="ib-chev" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-        </a>
-        <a class="item-btn" href="https://maps.apple.com/p/GQw0MY4gCth._6" target="_blank">
-          <div class="ib-icon">🍎</div>
-          <div class="ib-info">
-            <div class="ib-name">Apple Maps</div>
-            <div class="ib-handle" id="atap">Открыть</div>
-          </div>
-          <svg class="ib-chev" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-        </a>
-        <a class="item-btn" href="https://maps.app.goo.gl/KNGhYGvqFSbxwhc96?g_st=i" target="_blank">
-          <div class="ib-icon">🌐</div>
-          <div class="ib-info">
-            <div class="ib-name">Google Maps</div>
-            <div class="ib-handle" id="gtap">Открыть</div>
-          </div>
-          <svg class="ib-chev" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-        </a>
-      </div>
-    </div>
+  <div class="acard">
+    <div class="acity">Санкт-Петербург</div>
+    <div class="astreet">ул. 4-я Красноармейская,<br>дом 3</div>
+    <div class="adom">Домофон: 22</div>
   </div>
+
+  <div class="rlist">
+
+    <a class="rrow" href="https://yandex.ru/maps/-/CLaRUCPW" style="--rc:#FC3F1D">
+      <div class="rico-wrap">
+        <svg viewBox="0 0 48 48"><rect width="48" height="48" rx="12" fill="#FC3F1D"/><path fill="#fff" d="M24 10c-5.5 0-10 4.5-10 10 0 7 8.3 15.4 9.3 16.3a1 1 0 0 0 1.4 0C25.7 35.4 34 27 34 20c0-5.5-4.5-10-10-10zm0 13.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/></svg>
+      </div>
+      <div class="rinfo">
+        <strong>Яндекс Карты</strong>
+        <small>Маршрут и навигация</small>
+      </div>
+      <div class="rarrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+    </a>
+
+    <a class="rrow" href="https://maps.apple/p/GQw0MY4gCth._6" style="--rc:#F43F5E">
+      <div class="rico-wrap">
+        <svg viewBox="0 0 48 48"><defs><linearGradient id="apm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF6B6B"/><stop offset="1" stop-color="#F43F5E"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="#F1F5F9"/><path d="M8 34 18 20l10 8 14-12" stroke="#E2E8F0" stroke-width="2.5" fill="none" stroke-linecap="round"/><path fill="url(#apm)" d="M24 12c-4.4 0-8 3.6-8 8 0 5.6 6.5 12.5 7.4 13.3a.9.9 0 0 0 1.2 0C25.5 32.5 32 25.6 32 20c0-4.4-3.6-8-8-8zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>
+      </div>
+      <div class="rinfo">
+        <strong>Apple Карты</strong>
+        <small>Открыть в Apple Maps</small>
+      </div>
+      <div class="rarrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+    </a>
+
+    <a class="rrow" href="https://maps.app.goo.gl/FmQcs1UbBJJjGJYE7?g_st=ic" style="--rc:#4285F4">
+      <div class="rico-wrap">
+        <svg viewBox="0 0 48 48"><rect width="48" height="48" rx="12" fill="#fff"/><path fill="#34A853" d="M24 8C17.4 8 12 13.3 12 19.9c0 3.1 1.3 6.2 3 9.1L24 24z"/><path fill="#4285F4" d="M24 8c6.6 0 12 5.3 12 11.9 0 3.1-1.3 6.2-3 9.1L24 24z"/><path fill="#FBBC05" d="M15 29c1.8 3.1 4.7 6.7 7.1 9.2.6.6 1.2 1.2 1.9 1.8L24 24z"/><path fill="#EA4335" d="M33 29c-1.8 3.1-4.7 6.7-7.1 9.2-.6.6-1.2 1.2-1.9 1.8L24 24z"/><circle cx="24" cy="19.5" r="5.5" fill="#fff"/></svg>
+      </div>
+      <div class="rinfo">
+        <strong>Google Карты</strong>
+        <small>Открыть в Google Maps</small>
+      </div>
+      <div class="rarrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+    </a>
+
+  </div>
+</section>
 
 </div>
 
 <script>
-// ===== NAV =====
-let current = null;
-function goTo(id) {
-  document.getElementById('home').classList.add('pushed');
-  const el = document.getElementById(id);
-  el.classList.add('active');
-  el.scrollTop = 0;
-  current = id;
-}
-function goBack() {
-  if (!current) return;
-  document.getElementById(current).classList.remove('active');
-  document.getElementById('home').classList.remove('pushed');
-  current = null;
-}
-
-// ===== MAIL APP LINKS (device-aware) =====
-(function setMailLinks() {
-  const email = 'kopitsentr.omad@bk.ru';
-  const ua    = navigator.userAgent || '';
-  const isIOS = /iPhone|iPad|iPod/.test(ua);
-  const isAnd = /Android/.test(ua);
-
-  // --- Mail.ru ---
-  const mailruBtn = document.getElementById('mailru-btn');
-  if (isIOS) {
-    mailruBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      // Correct Mail.ru iOS deep link scheme
-      var deepLink = 'mailru://compose?to=' + email;
-      var appStore = 'https://apps.apple.com/app/id511310430';
-      // Try to open app; if not installed, go to App Store
-      var iframe = document.createElement('iframe');
-      iframe.style.display = 'none';
-      document.body.appendChild(iframe);
-      iframe.src = deepLink;
-      setTimeout(function() {
-        document.body.removeChild(iframe);
-        // If still on page → app not installed → open App Store
-        window.location.href = appStore;
-      }, 1200);
-    });
-  } else if (isAnd) {
-    mailruBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      window.location.href = 'mailru://compose?to=' + email;
-      setTimeout(function() {
-        window.location.href = 'https://play.google.com/store/apps/details?id=ru.mail.mailapp';
-      }, 800);
-    });
-  } else {
-    mailruBtn.href   = 'https://e.mail.ru/compose/?to=' + email;
-    mailruBtn.target = '_blank';
-  }
-
-  // --- Gmail ---
-  const gmailBtn = document.getElementById('gmail-btn');
-  if (isIOS) {
-    gmailBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      window.location.href = 'googlegmail://co?to=' + email;
-      setTimeout(function() {
-        window.location.href = 'https://apps.apple.com/app/id422689480';
-      }, 700);
-    });
-  } else if (isAnd) {
-    gmailBtn.href = 'intent://compose?to=' + email + '#Intent;scheme=mailto;package=com.google.android.gm;end';
-  } else {
-    gmailBtn.href   = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + email;
-    gmailBtn.target = '_blank';
-  }
-})();
-
-// ===== LANG =====
-let lang = 'ru';
-const TR = {
-  ru: {
-    leyebrow:'КОПИ · ПРИНТ · ДОКУМЕНТЫ', ltag:'Ваш надёжный партнёр', lsec:'— КОНТАКТЫ —',
-    htg:'Telegram','htg-s':'2 канала','hwa-s':'2 номера',
-    hmax:'MAX · ВКонтакте','hmax-s':'Написать в MAX',
-    hmail:'Почта · E-mail', hloc:'Адрес · Карта','hloc-s':'4-я Красноармейская, д. 3',
-    'btg-back':'Назад','bwa-back':'Назад','bmail-back':'Назад','bloc-back':'Назад',
-    'tg-title':'Telegram','tg-sub':'Выберите канал',
-    'tg-n1':'Копицентр Омад','tg-n2':'Копицентр Омад',
-    'wa-sub':'Выберите номер','wa-n1':'Копицентр Омад','wa-n2':'Копицентр Омад',
-    'mail-title':'Написать нам','mail-sub':'Выберите сервис',
-    'ml-mailru':'Mail.ru','ml-mailru-s':'Открыть приложение',
-    'ml-gmail':'Gmail','ml-gmail-s':'Открыть приложение',
-    'ml-apple':'Apple Mail','ml-apple-s':'Открыть приложение',
-    'loc-title':'Наш адрес','loc-sub':'Как нас найти','dom-lbl':'Домофон:',
-    ytap:'Открыть', atap:'Открыть', gtap:'Открыть',
-  },
-  uz: {
-    leyebrow:'КОПИЯ · ЧОП · ХУЖЖАТЛАР', ltag:'Ишончли хамкорингиз', lsec:'— АЛОҚА —',
-    htg:'Телеграм','htg-s':'2 та канал','hwa-s':'2 та рақам',
-    hmax:'MAX · ВКонтакте','hmax-s':'MAXда ёзинг',
-    hmail:'Почта · E-mail', hloc:'Манзил · Харита','hloc-s':'4-я Красноармейская, 3-уй',
-    'btg-back':'Орқага','bwa-back':'Орқага','bmail-back':'Орқага','bloc-back':'Орқага',
-    'tg-title':'Телеграм','tg-sub':'Канални танланг',
-    'tg-n1':'Копицентр Омад','tg-n2':'Копицентр Омад',
-    'wa-sub':'Рақамни танланг','wa-n1':'Копицентр Омад','wa-n2':'Копицентр Омад',
-    'mail-title':'Бизга ёзинг','mail-sub':'Сервисни танланг',
-    'ml-mailru':'Mail.ru','ml-mailru-s':'Иловани очиш',
-    'ml-gmail':'Gmail','ml-gmail-s':'Иловани очиш',
-    'ml-apple':'Apple Mail','ml-apple-s':'Иловани очиш',
-    'loc-title':'Манзилимиз','loc-sub':'Бизни қандай топиш мумкин','dom-lbl':'Домофон:',
-    ytap:'Очиш', atap:'Очиш', gtap:'Очиш',
-  }
-};
-function setLang(l) {
-  lang = l;
-  document.querySelectorAll('.lang-btn').forEach(b => {
-    if (b.id && b.id.startsWith('lru')) b.classList.toggle('active', l==='ru');
-    if (b.id && b.id.startsWith('luz')) b.classList.toggle('active', l==='uz');
+// ── navigation ──
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const sc=document.getElementById(id);
+  sc.classList.add('active');
+  // retrigger staggered animations
+  const els=sc.querySelectorAll('.ccard,.rrow');
+  els.forEach((el,i)=>{
+    el.style.animation='none';
+    void el.offsetWidth;
+    el.classList.remove('in');
+    void el.offsetWidth;
+    el.classList.add('in');
+    el.style.animationDelay=(i*0.07+0.05)+'s';
   });
-  const t = TR[l];
-  for (const [k,v] of Object.entries(t)) {
-    const el = document.getElementById(k);
-    if (el) el.textContent = v;
-  }
+  window.scrollTo({top:0});
 }
+
+document.querySelectorAll('[data-to]').forEach(b=>
+  b.addEventListener('click',()=>go(b.dataset.to))
+);
+document.querySelectorAll('[data-back]').forEach(b=>
+  b.addEventListener('click',()=>go('home'))
+);
+
+// initial load animation
+window.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('#home .ccard').forEach((el,i)=>{
+    el.classList.add('in');
+    el.style.animationDelay=(i*0.08+0.32)+'s';
+  });
+});
 </script>
 </body>
 </html>
