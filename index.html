@@ -3,141 +3,159 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
-<meta name="theme-color" content="#04060D"/>
-<title>Копицентр · Омад</title>
+<meta name="theme-color" content="#03050B"/>
+<title>Копицентр</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ════════════════════════════════════════
-   RESET & ROOT
-════════════════════════════════════════ */
+/* ══ RESET ══ */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow-x:hidden}
-
-:root{
-  --bg:#04060D;
-  --surface:rgba(12,18,36,.72);
-  --surface2:rgba(8,12,24,.55);
-  --border:rgba(255,255,255,.06);
-  --border2:rgba(255,255,255,.10);
-  --text:#EDF0F7;
-  --muted:#3D4F6B;
-  --muted2:#222D42;
-}
+html,body{min-height:100%;overflow-x:hidden}
 
 body{
   font-family:'Inter',sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  min-height:100vh;
+  background:#03050B;
+  color:#E8EDF5;
   display:flex;
   justify-content:center;
 }
 
-/* ════════════════════════════════════════
-   DOT GRID BACKGROUND
-════════════════════════════════════════ */
+/* dot grid */
 body::before{
-  content:'';
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:radial-gradient(circle,rgba(255,255,255,.045) 1px,transparent 1px);
-  background-size:28px 28px;
-  mask-image:radial-gradient(ellipse 80% 90% at 50% 50%,black 30%,transparent 100%);
-  -webkit-mask-image:radial-gradient(ellipse 80% 90% at 50% 50%,black 30%,transparent 100%);
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:radial-gradient(rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:26px 26px;
+  mask-image:radial-gradient(ellipse 80% 90% at 50% 40%,#000 20%,transparent 100%);
+  -webkit-mask-image:radial-gradient(ellipse 80% 90% at 50% 40%,#000 20%,transparent 100%);
 }
-
-/* single centered glow — one bold choice */
+/* single ambient glow */
 body::after{
-  content:'';
-  position:fixed;
-  width:700px;height:460px;
-  top:50%;left:50%;
-  transform:translate(-50%,-58%);
-  background:radial-gradient(ellipse,rgba(30,64,175,.18) 0%,transparent 68%);
-  filter:blur(60px);
-  z-index:0;pointer-events:none;
+  content:'';position:fixed;
+  width:580px;height:380px;
+  top:-60px;left:50%;transform:translateX(-50%);
+  background:radial-gradient(ellipse,rgba(29,78,216,.16),transparent 68%);
+  filter:blur(55px);z-index:0;pointer-events:none;
 }
 
-/* ════════════════════════════════════════
-   APP SHELL
-════════════════════════════════════════ */
+/* ══ SHELL ══ */
 .app{
   position:relative;z-index:2;
-  width:100%;max-width:420px;
+  width:100%;max-width:430px;
   min-height:100vh;
-  display:flex;flex-direction:column;
   padding-bottom:60px;
 }
 
-/* ════════════════════════════════════════
-   SCREENS
-════════════════════════════════════════ */
-.screen{display:none;flex-direction:column;}
-.screen.active{display:flex;}
+/* ══════════════════════════════════════
+   SCREEN SYSTEM — stable, CSS-only fade
+══════════════════════════════════════ */
+.screen{
+  display:none;
+  flex-direction:column;
+}
+.screen.active{
+  display:flex;
+  animation:pgIn .35s ease both;
+}
+@keyframes pgIn{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:translateY(0)}
+}
 
-/* ════════════════════════════════════════
-   HEADER / HERO
-════════════════════════════════════════ */
+/*
+  CRITICAL FIX:
+  Cards & rows are ALWAYS visible (opacity:1).
+  When inside .screen.active they get a stagger animation
+  but they're never opacity:0 in a resting state.
+*/
+.cc, .rrow{
+  opacity:1; /* always visible */
+}
+
+/* stagger only while screen is animating in */
+.screen.active .cc:nth-child(1){ animation:cIn .45s .05s ease both }
+.screen.active .cc:nth-child(2){ animation:cIn .45s .12s ease both }
+.screen.active .cc:nth-child(3){ animation:cIn .45s .19s ease both }
+.screen.active .cc:nth-child(4){ animation:cIn .45s .26s ease both }
+.screen.active .cc:nth-child(5){ animation:cIn .45s .33s ease both }
+.screen.active .cc:nth-child(6){ animation:cIn .45s .40s ease both }
+
+.screen.active .rlist .rrow:nth-child(1){ animation:cIn .42s .08s ease both }
+.screen.active .rlist .rrow:nth-child(2){ animation:cIn .42s .16s ease both }
+.screen.active .rlist .rrow:nth-child(3){ animation:cIn .42s .24s ease both }
+
+@keyframes cIn{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ══ HERO ══ */
 .hero{
-  padding:56px 24px 40px;
+  padding:52px 22px 26px;
   display:flex;flex-direction:column;
   align-items:flex-start;
 }
 
-.hero-badge{
+/* status badge */
+.status-wrap{display:flex;align-items:center;gap:9px;margin-bottom:7px;}
+.sbadge{
   display:inline-flex;align-items:center;gap:7px;
-  background:rgba(30,64,175,.14);
-  border:1px solid rgba(59,130,246,.22);
-  border-radius:100px;
-  padding:5px 13px 5px 9px;
-  margin-bottom:24px;
-  opacity:0;animation:fadeUp .55s ease .05s forwards;
+  border-radius:100px;padding:5px 13px 5px 9px;
+  font-size:12px;font-weight:500;letter-spacing:.2px;
 }
-.hero-badge-dot{
-  width:6px;height:6px;border-radius:50%;
-  background:#3B82F6;
-  box-shadow:0 0 0 3px rgba(59,130,246,.2);
-  animation:breathe 2s ease-in-out infinite;
+.sbadge.open{
+  background:rgba(16,185,129,.11);
+  border:1px solid rgba(16,185,129,.24);
+  color:#34D399;
 }
-@keyframes breathe{0%,100%{box-shadow:0 0 0 3px rgba(59,130,246,.2)}50%{box-shadow:0 0 0 5px rgba(59,130,246,.06)}}
-.hero-badge span{font-size:11px;font-weight:500;letter-spacing:.5px;color:#93AFDB;}
+.sbadge.closed{
+  background:rgba(239,68,68,.10);
+  border:1px solid rgba(239,68,68,.22);
+  color:#F87171;
+}
+.sdot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.sbadge.open .sdot{
+  background:#10B981;
+  box-shadow:0 0 0 3px rgba(16,185,129,.2);
+  animation:pulse 2.2s ease-in-out infinite;
+}
+.sbadge.closed .sdot{background:#EF4444;}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 0 3px rgba(16,185,129,.2)}
+  50%{box-shadow:0 0 0 5px rgba(16,185,129,.04)}
+}
+.stime{font-size:11.5px;color:#1E2C42;}
 
-.hero h1{
-  font-family:'Space Grotesk',sans-serif;
-  font-size:38px;font-weight:700;
-  letter-spacing:-1px;line-height:1.08;
-  color:#EDF0F7;
-  margin-bottom:12px;
-  opacity:0;animation:fadeUp .55s ease .12s forwards;
+/* city */
+.city{
+  font-size:10.5px;letter-spacing:2.5px;
+  color:#1A2236;text-transform:uppercase;
+  font-weight:500;margin-bottom:20px;
 }
-.hero h1 em{
-  font-style:normal;
-  background:linear-gradient(105deg,#60A5FA,#A78BFA);
+
+.hero-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:42px;font-weight:700;letter-spacing:-1.5px;line-height:1.04;
+  color:#EDF1F8;margin-bottom:14px;
+}
+.hero-title .ac{
+  background:linear-gradient(100deg,#60A5FA,#A78BFA);
   -webkit-background-clip:text;background-clip:text;color:transparent;
 }
-
-.hero p{
-  font-size:14px;line-height:1.6;
-  color:var(--muted);
-  max-width:300px;
-  opacity:0;animation:fadeUp .55s ease .20s forwards;
+.hero-sub{
+  font-size:13.5px;line-height:1.65;
+  color:#2D3A52;max-width:290px;
 }
 
-/* ════════════════════════════════════════
-   SECTION LABEL
-════════════════════════════════════════ */
-.label{
-  padding:0 20px 14px;
-  font-size:10px;letter-spacing:3px;
-  text-transform:uppercase;
-  color:var(--muted2);font-weight:500;
-  opacity:0;animation:fadeUp .5s ease .28s forwards;
+/* ══ SECTION HEAD ══ */
+.sh{
+  display:flex;align-items:center;gap:12px;
+  padding:22px 22px 14px;
 }
+.sh span{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#172030;font-weight:600;}
+.sh::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.04);}
 
-/* ════════════════════════════════════════
-   CONTACT GRID  (2 × 3)
-════════════════════════════════════════ */
+/* ══ CONTACT GRID ══ */
 .grid{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -145,470 +163,557 @@ body::after{
   padding:0 14px;
 }
 
-.ccard{
+.cc{
   position:relative;overflow:hidden;
-  display:flex;flex-direction:column;align-items:flex-start;
-  padding:20px 18px 18px;
-  border-radius:18px;
-  background:var(--surface);
-  border:1px solid var(--border);
-  backdrop-filter:blur(20px) saturate(140%);
-  -webkit-backdrop-filter:blur(20px) saturate(140%);
-  text-decoration:none;color:var(--text);
+  display:flex;flex-direction:column;
+  padding:20px 17px 18px;
+  border-radius:17px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.07);
+  text-decoration:none;color:#E8EDF5;
   cursor:pointer;font-family:inherit;
-  opacity:0;
-  transition:transform .18s ease,border-color .22s ease,background .22s ease;
+  transition:background .2s,border-color .2s,transform .15s;
 }
-
-/* colored top accent — THE signature element */
-.ccard::before{
+/* colour stripe */
+.cc::before{
   content:'';
   position:absolute;top:0;left:0;right:0;height:1.5px;
-  background:var(--stripe,linear-gradient(90deg,transparent,#3B82F6,transparent));
-  opacity:.7;
-  transition:opacity .25s ease;
+  background:var(--stripe);
+  opacity:.7;transition:opacity .25s;
 }
-.ccard:hover::before{opacity:1;}
-
-/* inner highlight */
-.ccard::after{
-  content:'';
-  position:absolute;inset:0;
-  background:linear-gradient(160deg,rgba(255,255,255,.045) 0%,transparent 50%);
+.cc:hover::before,.cc:focus::before{opacity:1;}
+/* inner gloss */
+.cc::after{
+  content:'';position:absolute;inset:0;border-radius:17px;
+  background:linear-gradient(150deg,rgba(255,255,255,.05),transparent 50%);
   pointer-events:none;
-  border-radius:18px;
 }
-
-.ccard:hover{
-  border-color:var(--border2);
-  background:rgba(14,22,44,.78);
-  transform:translateY(-2px);
+.cc:hover,.cc:focus{
+  background:rgba(255,255,255,.055);
+  border-color:rgba(255,255,255,.12);
+  outline:none;
 }
-.ccard:active{transform:scale(.96) translateY(0);}
+.cc:active{transform:scale(.955);}
 
-.ccard.in{animation:cardIn .5s cubic-bezier(.22,1,.36,1) both;}
-@keyframes cardIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-
-.cico{
-  width:40px;height:40px;
-  margin-bottom:16px;
-  border-radius:12px;
-  display:flex;align-items:center;justify-content:center;
-  background:var(--ico-bg,rgba(59,130,246,.12));
-  border:1px solid var(--ico-bd,rgba(59,130,246,.18));
+.cc-ico{
+  width:46px;height:46px;border-radius:13px;
+  margin-bottom:16px;overflow:hidden;flex-shrink:0;
+  position:relative;z-index:1;
+  box-shadow:0 6px 18px -6px rgba(0,0,0,.6);
 }
-.cico svg{width:22px;height:22px;display:block;}
-
-.cname{
+.cc-ico svg{display:block;width:100%;height:100%;}
+.cc-name{
   font-family:'Space Grotesk',sans-serif;
-  font-size:15px;font-weight:600;
-  color:#EDF0F7;line-height:1;
-  margin-bottom:4px;
+  font-size:14.5px;font-weight:600;color:#EDF1F8;
+  position:relative;z-index:1;margin-bottom:4px;
 }
-.csub{font-size:11px;color:var(--muted);line-height:1.3;font-weight:400;}
+.cc-sub{font-size:10.5px;color:#1E2C42;position:relative;z-index:1;}
 
-/* ════════════════════════════════════════
-   SUB SCREENS — TOP BAR
-════════════════════════════════════════ */
+/* ══ TOPBAR ══ */
 .topbar{
   display:flex;align-items:center;gap:14px;
-  padding:52px 18px 30px;
+  padding:52px 18px 24px;
 }
-.back-btn{
-  width:40px;height:40px;flex-shrink:0;
+.bk{
+  width:40px;height:40px;
   display:flex;align-items:center;justify-content:center;
   border-radius:12px;
-  background:var(--surface2);
-  border:1px solid var(--border);
-  cursor:pointer;color:#5A6A85;
-  transition:color .2s,border-color .2s,transform .15s;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.08);
+  cursor:pointer;color:#3D5270;
+  transition:background .2s,transform .15s;
 }
-.back-btn:hover{border-color:var(--border2);color:#93AFDB;}
-.back-btn:active{transform:scale(.9);}
-.back-btn svg{width:18px;height:18px;display:block;}
-
-.topbar-title{
+.bk:active{transform:scale(.9);}
+.bk svg{width:19px;height:19px;display:block;}
+.topbar-ttl{
   font-family:'Space Grotesk',sans-serif;
-  font-size:18px;font-weight:600;letter-spacing:4px;
-  color:#9BAACB;
+  font-size:18px;font-weight:600;letter-spacing:4px;color:#4A637A;
 }
 
-/* ════════════════════════════════════════
-   EMAIL CHIP
-════════════════════════════════════════ */
+/* ══ EMAIL CHIP ══ */
 .echip{
-  margin:0 14px 20px;
-  padding:14px 18px;
-  border-radius:14px;
-  background:rgba(14,22,44,.6);
-  border:1px solid rgba(59,130,246,.14);
-  display:flex;align-items:center;gap:12px;
-  backdrop-filter:blur(16px);
+  margin:0 14px 16px;
+  padding:15px 18px;
+  border-radius:15px;
+  background:rgba(99,102,241,.07);
+  border:1px solid rgba(99,102,241,.16);
+  display:flex;align-items:center;gap:13px;
 }
 .echip-ico{
-  width:36px;height:36px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
+  width:38px;height:38px;flex-shrink:0;
   border-radius:10px;
-  background:rgba(99,102,241,.1);
-  border:1px solid rgba(99,102,241,.18);
+  background:rgba(99,102,241,.12);
+  border:1px solid rgba(99,102,241,.2);
+  display:flex;align-items:center;justify-content:center;
 }
 .echip-ico svg{width:18px;height:18px;}
-.echip-info{display:flex;flex-direction:column;gap:2px;}
-.echip-label{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
-.echip-val{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:500;color:#C7D2FE;letter-spacing:.3px;}
+.echip-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#1E2C42;margin-bottom:3px;}
+.echip-val{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:14px;font-weight:600;color:#C7D2FE;letter-spacing:.3px;
+}
 
-/* ════════════════════════════════════════
-   ADDRESS CARD
-════════════════════════════════════════ */
+/* ══ ADDRESS CARD ══ */
 .acard{
-  margin:0 14px 20px;
-  padding:20px;
-  border-radius:16px;
-  background:rgba(14,22,44,.6);
-  border:1px solid rgba(255,255,255,.06);
-  backdrop-filter:blur(16px);
+  margin:0 14px 16px;
+  padding:20px;border-radius:16px;
+  background:rgba(255,255,255,.028);
+  border:1px solid rgba(255,255,255,.07);
   position:relative;overflow:hidden;
 }
 .acard::before{
   content:'';position:absolute;top:0;left:0;right:0;height:1.5px;
-  background:linear-gradient(90deg,transparent,#A855F7,#EC4899,transparent);
-  opacity:.6;
+  background:linear-gradient(90deg,transparent,#A855F7 40%,#EC4899 60%,transparent);
+  opacity:.7;
 }
-.acity{font-size:10px;letter-spacing:2.5px;color:var(--muted2);text-transform:uppercase;margin-bottom:10px;}
-.astreet{
+.acard-city{font-size:10px;letter-spacing:2.5px;color:#1A2236;text-transform:uppercase;margin-bottom:10px;font-weight:500;}
+.acard-street{
   font-family:'Space Grotesk',sans-serif;
   font-size:18px;font-weight:600;line-height:1.5;
-  background:linear-gradient(110deg,#CBD5E1 20%,#E2E8F0 45%,#94A3B8 70%);
-  background-size:200% 100%;
+  background:linear-gradient(110deg,#CBD5E1 20%,#94A3B8 45%,#E2E8F0 70%);
+  background-size:200%;
   -webkit-background-clip:text;background-clip:text;color:transparent;
-  animation:shim 6s linear infinite;
+  animation:sh 7s linear infinite;
 }
-@keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.adom{margin-top:6px;font-size:13px;color:var(--muted);}
+@keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.acard-extra{margin-top:8px;font-size:12px;color:#1E2C42;}
 
-/* ════════════════════════════════════════
-   LIST ROWS
-════════════════════════════════════════ */
-.rlist{
-  display:flex;flex-direction:column;
-  gap:8px;
-  padding:0 14px;
-}
-
+/* ══ LIST ROWS ══ */
+.rlist{display:flex;flex-direction:column;gap:8px;padding:0 14px;}
 .rrow{
   display:flex;align-items:center;gap:14px;
-  padding:15px 16px;
-  border-radius:16px;
-  background:var(--surface2);
-  border:1px solid var(--border);
-  backdrop-filter:blur(16px);
-  text-decoration:none;color:var(--text);
-  opacity:0;
-  transition:border-color .2s,background .2s,transform .16s;
+  padding:14px 15px;
+  border-radius:15px;
+  background:rgba(255,255,255,.028);
+  border:1px solid rgba(255,255,255,.065);
+  text-decoration:none;color:#E8EDF5;
   position:relative;overflow:hidden;
+  transition:background .2s,border-color .2s,transform .15s;
 }
 .rrow::before{
   content:'';position:absolute;
-  left:0;top:12px;bottom:12px;width:2px;border-radius:2px;
-  background:var(--rc,#3B82F6);opacity:0;
-  transition:opacity .25s ease;
+  left:0;top:14px;bottom:14px;width:2px;border-radius:2px;
+  background:var(--ac,#3B82F6);
+  opacity:0;transition:opacity .2s;
 }
-.rrow:hover::before{opacity:.7;}
-.rrow:hover{border-color:var(--border2);background:rgba(12,18,36,.8);}
-.rrow:active{transform:scale(.975);}
-.rrow.in{animation:cardIn .46s cubic-bezier(.22,1,.36,1) both;}
-
-.rico-wrap{
-  width:44px;height:44px;flex-shrink:0;
-  border-radius:13px;overflow:hidden;
+.rrow:hover::before,.rrow:focus::before{opacity:.8;}
+.rrow:hover,.rrow:focus{
+  background:rgba(255,255,255,.05);
+  border-color:rgba(255,255,255,.12);
+  outline:none;
 }
-.rico-wrap svg{display:block;width:100%;height:100%;}
+.rrow:active{transform:scale(.972);}
 
+.rico{width:46px;height:46px;flex-shrink:0;border-radius:13px;overflow:hidden;box-shadow:0 5px 14px -5px rgba(0,0,0,.55);}
+.rico svg{display:block;width:100%;height:100%;}
 .rinfo{flex:1;}
-.rinfo strong{display:block;font-size:15px;font-weight:600;color:#EDF0F7;}
-.rinfo small{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;}
-
-.rarrow{
-  width:28px;height:28px;flex-shrink:0;
+.rinfo b{display:block;font-size:15px;font-weight:600;color:#EDF1F8;}
+.rinfo small{display:block;font-size:11.5px;color:#1E2C42;margin-top:2px;}
+.rarr{
+  width:28px;height:28px;
   display:flex;align-items:center;justify-content:center;
   border-radius:8px;
-  background:rgba(255,255,255,.04);
-  border:1px solid var(--border);
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.07);
+  color:#253348;flex-shrink:0;
 }
-.rarrow svg{width:14px;height:14px;color:#3D4F6B;}
-
-/* ════════════════════════════════════════
-   ANIMATIONS
-════════════════════════════════════════ */
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(12px)}
-  to{opacity:1;transform:translateY(0)}
-}
+.rarr svg{width:14px;height:14px;}
 </style>
 </head>
 <body>
-
 <div class="app">
 
-<!-- ═══════════════════════════════
-     HOME SCREEN
-═══════════════════════════════ -->
+<!-- ═══════════ HOME ═══════════ -->
 <section class="screen active" id="home">
-
   <div class="hero">
-    <div class="hero-badge">
-      <div class="hero-badge-dot"></div>
-      <span>Санкт-Петербург · Открыто</span>
+
+    <div class="status-wrap">
+      <div class="sbadge closed" id="sbadge">
+        <div class="sdot"></div>
+        <span id="stext">…</span>
+      </div>
+      <div class="stime" id="stime"></div>
     </div>
-    <h1>Копи<em>центр</em></h1>
-    <p>Печать, копирование и сканирование документов. Выберите удобный способ связи.</p>
+
+    <div class="city">Санкт-Петербург · Копицентр</div>
+    <div class="hero-title">Печать<br><span class="ac">и копии</span></div>
+    <div class="hero-sub">Выберите удобный мессенджер или способ связи — ответим быстро.</div>
   </div>
 
-  <div class="label">Контакты</div>
+  <div class="sh"><span>Контакты</span></div>
 
   <div class="grid">
 
-    <!-- Telegram -->
-    <a class="ccard" href="https://t.me/OMAD_TOUR9094"
-       style="--stripe:linear-gradient(90deg,transparent,#37BBFE,transparent);
-              --ico-bg:rgba(55,187,254,.10);--ico-bd:rgba(55,187,254,.18);">
-      <div class="cico">
-        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#37BBFE"/><path fill="#fff" d="M5.3 11.8 16.5 7.4c.6-.2 1.1.3.8 1l-1.9 8.7c-.1.7-.6.8-1.2.5l-3.2-2.4-1.6 1.5c-.2.1-.3.2-.7.2l.3-3.3 6-5.4c.3-.2 0-.3-.4-.1l-7.4 4.7-3.2-1c-.7-.2-.7-.6.2-1z"/></svg>
+    <!-- TELEGRAM -->
+    <a class="cc"
+       href="https://t.me/OMAD_TOUR9094"
+       style="--stripe:linear-gradient(90deg,transparent,#29B6F6,transparent)">
+      <div class="cc-ico">
+        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#40C4FF"/><stop offset="1" stop-color="#0288D1"/>
+          </linearGradient></defs>
+          <rect width="46" height="46" rx="13" fill="url(#tg)"/>
+          <path fill="rgba(255,255,255,.13)" d="M0 23C0 10.3 10.3 0 23 0h23v23C46 35.7 35.7 46 23 46H0z"/>
+          <path fill="#fff" d="M10.4 22.7 30.8 14.7c1-.38 1.88.42 1.55 1.76l-3.3 15.6c-.3 1.3-1.1 1.62-2.18 1.02l-6.07-4.47-2.93 2.83c-.38.37-.7.48-1.18.48l.43-6.12 11.1-10.02c.48-.43-.1-.67-.74-.24L14 25.9l-5.96-1.85c-1.3-.4-1.3-1.28.36-1.97z"/>
+        </svg>
       </div>
-      <div class="cname">Telegram</div>
-      <div class="csub">@OMAD_TOUR9094</div>
+      <div class="cc-name">Telegram</div>
+      <div class="cc-sub">@OMAD_TOUR9094</div>
     </a>
 
-    <!-- WhatsApp -->
-    <a class="ccard" href="https://wa.me/79811939094"
-       style="--stripe:linear-gradient(90deg,transparent,#25D366,transparent);
-              --ico-bg:rgba(37,211,102,.10);--ico-bd:rgba(37,211,102,.18);">
-      <div class="cico">
-        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#25D366"/><path fill="#fff" d="M12 6.3a5.7 5.7 0 0 0-5.7 5.7c0 1 .28 2 .8 2.9L6 18l3.1-.8c.85.46 1.8.7 2.9.7 3.14 0 5.7-2.55 5.7-5.7S15.14 6.3 12 6.3zm0 .9a4.8 4.8 0 0 1 4.8 4.8 4.8 4.8 0 0 1-4.8 4.8c-.87 0-1.7-.23-2.4-.65l-.3-.15-1.77.5.48-1.74-.15-.3A4.73 4.73 0 0 1 7.2 12a4.8 4.8 0 0 1 4.8-4.8z"/><path fill="#fff" d="M9.85 9.5c-.14-.3-.3-.3-.44-.3h-.35c-.14 0-.35.05-.52.25S8 10 8 10.9c0 .9.63 1.74.73 1.85.1.12 1.14 1.8 2.82 2.5 1.4.5 1.64.44 1.93.4.3-.05.95-.4 1.09-.75.14-.35.14-.66.1-.73-.05-.07-.18-.1-.38-.2s-1-.46-1.1-.5c-.14-.06-.25-.1-.38.1-.1.15-.44.5-.55.6-.1.1-.2.1-.36.04-.2-.1-.74-.3-1.25-.8-.47-.5-.78-.98-.88-1.14-.1-.15 0-.24.07-.3l.25-.35c.1-.1.1-.2.05-.3L9.85 9.5z"/></svg>
+    <!-- WHATSAPP -->
+    <a class="cc"
+       href="https://wa.me/79811939094"
+       style="--stripe:linear-gradient(90deg,transparent,#25D366,transparent)">
+      <div class="cc-ico">
+        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="wa" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#43E97B"/><stop offset="1" stop-color="#18A83A"/>
+          </linearGradient></defs>
+          <rect width="46" height="46" rx="13" fill="url(#wa)"/>
+          <path fill="rgba(255,255,255,.13)" d="M0 23C0 10.3 10.3 0 23 0h23v23C46 35.7 35.7 46 23 46H0z"/>
+          <path fill="#fff" d="M23 11.5C16.6 11.5 11.5 16.6 11.5 23c0 2.05.56 3.97 1.54 5.63L11.5 34.5l6.07-1.59A11.43 11.43 0 0 0 23 34.5C29.4 34.5 34.5 29.4 34.5 23S29.4 11.5 23 11.5zm0 1.75A9.74 9.74 0 0 1 32.75 23 9.74 9.74 0 0 1 23 32.75c-1.7 0-3.3-.43-4.7-1.2l-.52-.29-3.47.98.95-3.38-.29-.52A9.73 9.73 0 0 1 13.25 23 9.74 9.74 0 0 1 23 13.25zm-3.18 4.57c-.26-.58-.54-.58-.8-.58-.2 0-.44 0-.7.02s-.63.1-.97.47c-.34.37-1.3 1.28-1.3 3.11s1.34 3.6 1.52 3.85c.19.24 2.58 4.1 6.36 5.58 3.13 1.2 3.74.95 4.42.89.67-.06 2.17-.89 2.48-1.75.3-.86.3-1.6.21-1.76-.1-.15-.34-.24-.72-.42-.38-.19-2.23-.9-2.58-1.0-.34-.11-.58-.15-.83.15-.25.3-.96 1-.18 1.21-.2.2-.43.23-.82.08-.38-.15-1.6-.58-3.04-1.87-1.13-.99-1.88-2.22-2.1-2.6-.2-.37-.02-.58.16-.77l.55-.63c.17-.2.22-.37.34-.61l-.47-1.5z"/>
+        </svg>
       </div>
-      <div class="cname">WhatsApp</div>
-      <div class="csub">+7 981 193-90-94</div>
+      <div class="cc-name">WhatsApp</div>
+      <div class="cc-sub">+7 981 193-90-94</div>
     </a>
 
     <!-- MAX -->
-    <a class="ccard" href="https://max.ru/u/f9LHodD0cOK9n8SoDUmiSwL3ZdPoLfXFUMcRyl3zgviGR9Z2ZIpgFOK3NmY"
-       style="--stripe:linear-gradient(90deg,transparent,#7C5CFC,transparent);
-              --ico-bg:rgba(124,92,252,.10);--ico-bd:rgba(124,92,252,.18);">
-      <div class="cico">
-        <svg viewBox="0 0 24 24" fill="none">
-          <rect width="24" height="24" rx="7" fill="url(#mx2)"/>
-          <defs><linearGradient id="mx2" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#1FA2FF"/><stop offset="1" stop-color="#9747FF"/></linearGradient></defs>
-          <path fill="#fff" d="M12 4.5C7.86 4.5 4.5 7.86 4.5 12c0 1.4.38 2.73 1.05 3.87l-.7 2.63.07.04 2.56-.92A7.46 7.46 0 0 0 12 19.5c4.14 0 7.5-3.36 7.5-7.5S16.14 4.5 12 4.5z"/>
-          <circle cx="12" cy="12" r="4" fill="url(#mx2)"/>
+    <a class="cc"
+       href="https://max.ru/u/f9LHodD0cOK9n8SoDUmiSwL3ZdPoLfXFUMcRyl3zgviGR9Z2ZIpgFOK3NmY"
+       style="--stripe:linear-gradient(90deg,transparent,#7B68EE,transparent)">
+      <div class="cc-ico">
+        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="mxbg" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0" stop-color="#1976D2"/><stop offset=".5" stop-color="#5C6BC0"/><stop offset="1" stop-color="#8E24AA"/>
+            </linearGradient>
+            <linearGradient id="mxfg" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0" stop-color="#64B5F6"/><stop offset="1" stop-color="#CE93D8"/>
+            </linearGradient>
+          </defs>
+          <rect width="46" height="46" rx="13" fill="url(#mxbg)"/>
+          <path fill="rgba(255,255,255,.12)" d="M0 23C0 10.3 10.3 0 23 0h23v23C46 35.7 35.7 46 23 46H0z"/>
+          <path fill="#fff" d="M23 10.5c-6.9 0-12.5 5.6-12.5 12.5S16.1 35.5 23 35.5c2.5 0 4.83-.72 6.78-1.97l-1.1-4.24A9.96 9.96 0 0 1 23 30.75c-4.28 0-7.75-3.47-7.75-7.75S18.72 15.25 23 15.25 30.75 18.72 30.75 23c0 1.05-.2 2.06-.57 2.98l3.62 1.36A12.47 12.47 0 0 0 35.5 23c0-6.9-5.6-12.5-12.5-12.5z"/>
+          <circle cx="23" cy="23" r="6.5" fill="url(#mxfg)"/>
         </svg>
       </div>
-      <div class="cname">MAX</div>
-      <div class="csub">ВК Мессенджер</div>
+      <div class="cc-name">MAX</div>
+      <div class="cc-sub">ВК Мессенджер</div>
     </a>
 
-    <!-- imo -->
-    <a class="ccard" href="https://s.imoim.net/c5zW2V"
-       style="--stripe:linear-gradient(90deg,transparent,#06B6D4,transparent);
-              --ico-bg:rgba(6,182,212,.10);--ico-bd:rgba(6,182,212,.18);">
-      <div class="cico">
-        <svg viewBox="0 0 24 24" fill="none">
-          <rect width="24" height="24" rx="7" fill="url(#im2)"/>
-          <defs><linearGradient id="im2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#06B6D4"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs>
-          <path fill="#fff" d="M5.5 7h13a1.5 1.5 0 0 1 1.5 1.5v7A1.5 1.5 0 0 1 18.5 17H11l-3 2.5V17H5.5A1.5 1.5 0 0 1 4 15.5v-7A1.5 1.5 0 0 1 5.5 7z"/>
-          <circle cx="9" cy="12" r="1.1" fill="rgba(7,89,133,.6)"/>
-          <circle cx="12" cy="12" r="1.1" fill="rgba(7,89,133,.6)"/>
-          <circle cx="15" cy="12" r="1.1" fill="rgba(7,89,133,.6)"/>
+    <!-- IMO -->
+    <a class="cc"
+       href="https://s.imoim.net/c5zW2V"
+       style="--stripe:linear-gradient(90deg,transparent,#00BCD4,transparent)">
+      <div class="cc-ico">
+        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="im" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#00BCD4"/><stop offset="1" stop-color="#1565C0"/>
+          </linearGradient></defs>
+          <rect width="46" height="46" rx="13" fill="url(#im)"/>
+          <path fill="rgba(255,255,255,.12)" d="M0 23C0 10.3 10.3 0 23 0h23v23C46 35.7 35.7 46 23 46H0z"/>
+          <rect x="9" y="14" width="28" height="17" rx="4" fill="none" stroke="#fff" stroke-width="2"/>
+          <path d="M9.5 14.5 23 22.5 36.5 14.5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+          <path d="M18 31 14 36H28l-4-5" fill="rgba(255,255,255,.35)"/>
         </svg>
       </div>
-      <div class="cname">imo</div>
-      <div class="csub">Написать сейчас</div>
+      <div class="cc-name">imo</div>
+      <div class="cc-sub">Написать сейчас</div>
     </a>
 
-    <!-- Почта -->
-    <button class="ccard" data-to="email" type="button"
-       style="--stripe:linear-gradient(90deg,transparent,#818CF8,transparent);
-              --ico-bg:rgba(129,140,248,.10);--ico-bd:rgba(129,140,248,.18);">
-      <div class="cico">
-        <svg viewBox="0 0 24 24" fill="none">
-          <rect width="24" height="24" rx="7" fill="url(#ml2)"/>
-          <defs><linearGradient id="ml2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366F1"/><stop offset="1" stop-color="#A855F7"/></linearGradient></defs>
-          <rect x="4" y="7" width="16" height="10" rx="2" fill="none" stroke="#fff" stroke-width="1.3"/>
-          <path d="M4.5 7.5 12 13 19.5 7.5" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- ПОЧТА -->
+    <button class="cc" id="btnEmail" type="button"
+       style="--stripe:linear-gradient(90deg,transparent,#818CF8,transparent)">
+      <div class="cc-ico">
+        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="ml" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#5C6BC0"/><stop offset="1" stop-color="#8E24AA"/>
+          </linearGradient></defs>
+          <rect width="46" height="46" rx="13" fill="url(#ml)"/>
+          <path fill="rgba(255,255,255,.12)" d="M0 23C0 10.3 10.3 0 23 0h23v23C46 35.7 35.7 46 23 46H0z"/>
+          <rect x="9" y="14" width="28" height="18" rx="3.5" fill="none" stroke="#fff" stroke-width="2"/>
+          <path d="M9.5 14.5 23 24 36.5 14.5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M9.5 31.5 17 25" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M36.5 31.5 29 25" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
       </div>
-      <div class="cname">Почта</div>
-      <div class="csub">omadru@bk.ru</div>
+      <div class="cc-name">Почта</div>
+      <div class="cc-sub">omadru@bk.ru</div>
     </button>
 
-    <!-- Адрес -->
-    <button class="ccard" data-to="address" type="button"
-       style="--stripe:linear-gradient(90deg,transparent,#EC4899,transparent);
-              --ico-bg:rgba(236,72,153,.10);--ico-bd:rgba(236,72,153,.18);">
-      <div class="cico">
-        <svg viewBox="0 0 24 24" fill="none">
-          <rect width="24" height="24" rx="7" fill="url(#pi2)"/>
-          <defs><linearGradient id="pi2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A855F7"/><stop offset="1" stop-color="#EC4899"/></linearGradient></defs>
-          <path fill="#fff" d="M12 4a5 5 0 0 0-5 5c0 3.5 4.17 7.7 4.65 8.15a.48.48 0 0 0 .7 0C12.83 16.7 17 12.5 17 9a5 5 0 0 0-5-5zm0 6.75a1.75 1.75 0 1 1 0-3.5 1.75 1.75 0 0 1 0 3.5z"/>
+    <!-- АДРЕС -->
+    <button class="cc" id="btnAddress" type="button"
+       style="--stripe:linear-gradient(90deg,transparent,#E879F9,transparent)">
+      <div class="cc-ico">
+        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="pi" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#9C27B0"/><stop offset="1" stop-color="#E91E63"/>
+          </linearGradient></defs>
+          <rect width="46" height="46" rx="13" fill="url(#pi)"/>
+          <path fill="rgba(255,255,255,.12)" d="M0 23C0 10.3 10.3 0 23 0h23v23C46 35.7 35.7 46 23 46H0z"/>
+          <path fill="#fff" d="M23 9c-5.8 0-10.5 4.7-10.5 10.5 0 7.35 8.7 16.1 9.75 17.05a1.05 1.05 0 0 0 1.5 0C24.8 35.6 33.5 26.85 33.5 19.5 33.5 13.7 28.8 9 23 9zm0 14.25a3.75 3.75 0 1 1 0-7.5 3.75 3.75 0 0 1 0 7.5z"/>
         </svg>
       </div>
-      <div class="cname">Адрес</div>
-      <div class="csub">4-я Красноармейская</div>
+      <div class="cc-name">Адрес</div>
+      <div class="cc-sub">4-я Красноармейская</div>
     </button>
 
   </div>
 </section>
 
-<!-- ═══════════════════════════════
-     ПОЧТА SCREEN
-═══════════════════════════════ -->
-<section class="screen" id="email">
-
+<!-- ═══════════ ПОЧТА ═══════════ -->
+<section class="screen" id="screenEmail">
   <div class="topbar">
-    <button class="back-btn" data-back type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    <button class="bk" id="backEmail" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
     </button>
-    <div class="topbar-title">ПОЧТА</div>
+    <div class="topbar-ttl">ПОЧТА</div>
   </div>
 
   <div class="echip">
     <div class="echip-ico">
-      <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="2.5" stroke="#818CF8" stroke-width="1.5"/><path d="M2.5 5.5 12 13 21.5 5.5" stroke="#818CF8" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="#818CF8" stroke-width="1.8"
+           stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2.5"/>
+        <path d="M2 4.5 12 13 22 4.5"/>
+      </svg>
     </div>
-    <div class="echip-info">
-      <div class="echip-label">Электронная почта</div>
+    <div>
+      <div class="echip-lbl">Электронная почта</div>
       <div class="echip-val">omadru@bk.ru</div>
     </div>
   </div>
 
   <div class="rlist">
 
-    <a class="rrow" href="https://mail.google.com/mail/?view=cm&fs=1&to=omadru@bk.ru" style="--rc:#EA4335">
-      <div class="rico-wrap">
-        <svg viewBox="0 0 48 48"><rect width="48" height="48" rx="12" fill="#fff"/><path fill="#EA4335" d="M10 14a3 3 0 0 1 3-3h22a3 3 0 0 1 3 3v2.5L24 26 10 16.5z"/><path fill="#4285F4" d="M10 16.5V34a1 1 0 0 0 1 1h4V20z"/><path fill="#34A853" d="M38 16.5V34a1 1 0 0 1-1 1h-4V20z"/><path fill="#FBBC05" d="M15 35h18V20l-9 7-9-7z"/></svg>
+    <a class="rrow"
+       href="https://mail.google.com/mail/?view=cm&fs=1&to=omadru@bk.ru"
+       style="--ac:#EA4335">
+      <div class="rico">
+        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+          <rect width="46" height="46" rx="12" fill="#fff"/>
+          <path fill="#EA4335" d="M9.5 13.5A3 3 0 0 1 12.5 11h21a3 3 0 0 1 3 2.5v2.8L23 26 9.5 16.3z"/>
+          <path fill="#4285F4" d="M9.5 16.3V33a1 1 0 0 0 1 1H15V19.5z"/>
+          <path fill="#34A853" d="M36.5 16.3V33a1 1 0 0 1-1 1H31V19.5z"/>
+          <path fill="#FBBC05" d="M15 34h16V19.5L23 26z"/>
+        </svg>
       </div>
       <div class="rinfo">
-        <strong>Gmail</strong>
-        <small>Написать через Gmail</small>
+        <b>Gmail</b>
+        <small>Открыть черновик в Gmail</small>
       </div>
-      <div class="rarrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+      <div class="rarr">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+             stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
     </a>
 
-    <a class="rrow" href="https://e.mail.ru/compose/?mailto=omadru@bk.ru" style="--rc:#168DE2">
-      <div class="rico-wrap">
-        <svg viewBox="0 0 48 48"><defs><linearGradient id="mr3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#168DE2"/><stop offset="1" stop-color="#0B5FC0"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#mr3)"/><text x="24" y="32" font-size="22" font-weight="800" font-family="Arial,sans-serif" fill="#fff" text-anchor="middle">@</text></svg>
+    <a class="rrow"
+       href="https://e.mail.ru/compose/?mailto=omadru@bk.ru"
+       style="--ac:#168DE2">
+      <div class="rico">
+        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="mr" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#1E88E5"/><stop offset="1" stop-color="#0D47A1"/>
+          </linearGradient></defs>
+          <rect width="46" height="46" rx="12" fill="url(#mr)"/>
+          <text x="23" y="31" font-size="22" font-weight="900"
+                font-family="Arial,sans-serif" fill="#fff" text-anchor="middle">@</text>
+        </svg>
       </div>
       <div class="rinfo">
-        <strong>Почта Mail.ru</strong>
+        <b>Почта Mail.ru</b>
         <small>Написать через Mail.ru / BK.ru</small>
       </div>
-      <div class="rarrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+      <div class="rarr">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+             stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
     </a>
 
-    <a class="rrow" href="mailto:omadru@bk.ru" style="--rc:#818CF8">
-      <div class="rico-wrap">
-        <svg viewBox="0 0 48 48"><defs><linearGradient id="am3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#818CF8"/><stop offset="1" stop-color="#A78BFA"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="#EEF2FF"/><rect x="9" y="13" width="30" height="22" rx="3.5" fill="#fff" stroke="#E2E8F0"/><path d="M9.5 14 24 25 38.5 14" fill="none" stroke="url(#am3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <a class="rrow"
+       href="mailto:omadru@bk.ru"
+       style="--ac:#818CF8">
+      <div class="rico">
+        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="am" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#818CF8"/><stop offset="1" stop-color="#A78BFA"/>
+          </linearGradient></defs>
+          <rect width="46" height="46" rx="12" fill="#EEF2FF"/>
+          <rect x="9" y="12" width="28" height="22" rx="3.5" fill="#fff" stroke="#E0E7FF" stroke-width="1.2"/>
+          <path d="M9.5 12.5 23 23 36.5 12.5" fill="none"
+                stroke="url(#am)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M9.5 33.5 17 26" fill="none" stroke="#C7D2FE" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M36.5 33.5 29 26" fill="none" stroke="#C7D2FE" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
       </div>
       <div class="rinfo">
-        <strong>Apple Mail</strong>
+        <b>Apple Mail</b>
         <small>Открыть в приложении Почта</small>
       </div>
-      <div class="rarrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+      <div class="rarr">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+             stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
     </a>
 
   </div>
 </section>
 
-<!-- ═══════════════════════════════
-     АДРЕС SCREEN
-═══════════════════════════════ -->
-<section class="screen" id="address">
-
+<!-- ═══════════ АДРЕС ═══════════ -->
+<section class="screen" id="screenAddress">
   <div class="topbar">
-    <button class="back-btn" data-back type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    <button class="bk" id="backAddress" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
     </button>
-    <div class="topbar-title">АДРЕС</div>
+    <div class="topbar-ttl">АДРЕС</div>
   </div>
 
   <div class="acard">
-    <div class="acity">Санкт-Петербург</div>
-    <div class="astreet">ул. 4-я Красноармейская,<br>дом 3</div>
-    <div class="adom">Домофон: 22</div>
+    <div class="acard-city">Санкт-Петербург</div>
+    <div class="acard-street">ул. 4-я Красноармейская,<br>дом 3</div>
+    <div class="acard-extra">Домофон: 22</div>
   </div>
 
   <div class="rlist">
 
-    <a class="rrow" href="https://yandex.ru/maps/-/CLaRUCPW" style="--rc:#FC3F1D">
-      <div class="rico-wrap">
-        <svg viewBox="0 0 48 48"><rect width="48" height="48" rx="12" fill="#FC3F1D"/><path fill="#fff" d="M24 10c-5.5 0-10 4.5-10 10 0 7 8.3 15.4 9.3 16.3a1 1 0 0 0 1.4 0C25.7 35.4 34 27 34 20c0-5.5-4.5-10-10-10zm0 13.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/></svg>
+    <a class="rrow"
+       href="https://yandex.ru/maps/-/CLaRUCPW"
+       style="--ac:#FC3F1D">
+      <div class="rico">
+        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+          <rect width="46" height="46" rx="12" fill="#FC3F1D"/>
+          <path fill="rgba(255,255,255,.15)" d="M0 23C0 10.3 10.3 0 23 0h23v23C46 35.7 35.7 46 23 46H0z"/>
+          <path fill="#fff" d="M23 9.5c-5.8 0-10.5 4.7-10.5 10.5 0 7.35 8.7 16.1 9.75 17.05a1.05 1.05 0 0 0 1.5 0C24.8 36.1 33.5 27.35 33.5 20 33.5 14.2 28.8 9.5 23 9.5zm0 14.25a3.75 3.75 0 1 1 0-7.5 3.75 3.75 0 0 1 0 7.5z"/>
+        </svg>
       </div>
       <div class="rinfo">
-        <strong>Яндекс Карты</strong>
+        <b>Яндекс Карты</b>
         <small>Маршрут и навигация</small>
       </div>
-      <div class="rarrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+      <div class="rarr">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+             stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
     </a>
 
-    <a class="rrow" href="https://maps.apple/p/GQw0MY4gCth._6" style="--rc:#F43F5E">
-      <div class="rico-wrap">
-        <svg viewBox="0 0 48 48"><defs><linearGradient id="apm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF6B6B"/><stop offset="1" stop-color="#F43F5E"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="#F1F5F9"/><path d="M8 34 18 20l10 8 14-12" stroke="#E2E8F0" stroke-width="2.5" fill="none" stroke-linecap="round"/><path fill="url(#apm)" d="M24 12c-4.4 0-8 3.6-8 8 0 5.6 6.5 12.5 7.4 13.3a.9.9 0 0 0 1.2 0C25.5 32.5 32 25.6 32 20c0-4.4-3.6-8-8-8zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>
+    <a class="rrow"
+       href="https://maps.apple/p/GQw0MY4gCth._6"
+       style="--ac:#F43F5E">
+      <div class="rico">
+        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="ap" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#FF5252"/><stop offset="1" stop-color="#F43F5E"/>
+          </linearGradient></defs>
+          <rect width="46" height="46" rx="12" fill="#F0F4FF"/>
+          <path d="M7 30 17 17.5 25 23.5 39 9" stroke="#D1D5DB" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <path fill="url(#ap)" d="M23 11.5c-4.7 0-8.5 3.8-8.5 8.5 0 5.95 6.9 13.3 7.85 14.2a.95.95 0 0 0 1.3 0c.95-.9 7.85-8.25 7.85-14.2 0-4.7-3.8-8.5-8.5-8.5zm0 11.75a3.25 3.25 0 1 1 0-6.5 3.25 3.25 0 0 1 0 6.5z"/>
+        </svg>
       </div>
       <div class="rinfo">
-        <strong>Apple Карты</strong>
+        <b>Apple Карты</b>
         <small>Открыть в Apple Maps</small>
       </div>
-      <div class="rarrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+      <div class="rarr">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+             stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
     </a>
 
-    <a class="rrow" href="https://maps.app.goo.gl/FmQcs1UbBJJjGJYE7?g_st=ic" style="--rc:#4285F4">
-      <div class="rico-wrap">
-        <svg viewBox="0 0 48 48"><rect width="48" height="48" rx="12" fill="#fff"/><path fill="#34A853" d="M24 8C17.4 8 12 13.3 12 19.9c0 3.1 1.3 6.2 3 9.1L24 24z"/><path fill="#4285F4" d="M24 8c6.6 0 12 5.3 12 11.9 0 3.1-1.3 6.2-3 9.1L24 24z"/><path fill="#FBBC05" d="M15 29c1.8 3.1 4.7 6.7 7.1 9.2.6.6 1.2 1.2 1.9 1.8L24 24z"/><path fill="#EA4335" d="M33 29c-1.8 3.1-4.7 6.7-7.1 9.2-.6.6-1.2 1.2-1.9 1.8L24 24z"/><circle cx="24" cy="19.5" r="5.5" fill="#fff"/></svg>
+    <a class="rrow"
+       href="https://maps.app.goo.gl/FmQcs1UbBJJjGJYE7?g_st=ic"
+       style="--ac:#4285F4">
+      <div class="rico">
+        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+          <rect width="46" height="46" rx="12" fill="#fff"/>
+          <path fill="#34A853" d="M23 7.5C16.1 7.5 10.5 13.1 10.5 20c0 3.3 1.35 6.35 3.5 8.6L23 24z"/>
+          <path fill="#4285F4" d="M23 7.5c6.9 0 12.5 5.6 12.5 12.5 0 3.3-1.35 6.35-3.5 8.6L23 24z"/>
+          <path fill="#FBBC04" d="M13 28.6c2.15 3.5 5.5 7 8.2 9.6.55.5 1.1 1 1.8 1.5L23 24z"/>
+          <path fill="#EA4335" d="M33 28.6c-2.15 3.5-5.5 7-8.2 9.6-.55.5-1.1 1-1.8 1.5L23 24z"/>
+          <circle cx="23" cy="19.5" r="5.5" fill="#fff"/>
+          <circle cx="23" cy="19.5" r="2.5" fill="#4285F4"/>
+        </svg>
       </div>
       <div class="rinfo">
-        <strong>Google Карты</strong>
+        <b>Google Карты</b>
         <small>Открыть в Google Maps</small>
       </div>
-      <div class="rarrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+      <div class="rarr">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+             stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
     </a>
 
   </div>
 </section>
 
-</div>
+</div><!-- .app -->
 
 <script>
-// ── navigation ──
-function go(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  const sc=document.getElementById(id);
-  sc.classList.add('active');
-  // retrigger staggered animations
-  const els=sc.querySelectorAll('.ccard,.rrow');
-  els.forEach((el,i)=>{
-    el.style.animation='none';
-    void el.offsetWidth;
-    el.classList.remove('in');
-    void el.offsetWidth;
-    el.classList.add('in');
-    el.style.animationDelay=(i*0.07+0.05)+'s';
+/* ══════════════════════════════════════
+   WORKING HOURS — Saint Petersburg UTC+3
+══════════════════════════════════════ */
+function spbNow() {
+  var now = new Date();
+  var utc = now.getTime() + now.getTimezoneOffset() * 60000;
+  return new Date(utc + 3 * 3600000);
+}
+function refreshStatus() {
+  var t   = spbNow();
+  var h   = t.getHours();
+  var m   = t.getMinutes();
+  var tot = h * 60 + m;
+  var open = (tot >= 9 * 60) && (tot < 19 * 60 + 30);
+
+  var badge = document.getElementById('sbadge');
+  var txt   = document.getElementById('stext');
+  var tim   = document.getElementById('stime');
+
+  badge.className = 'sbadge ' + (open ? 'open' : 'closed');
+  txt.textContent = open ? 'Открыто' : 'Закрыто';
+  tim.textContent = (h < 10 ? '0' + h : h) + ':' + (m < 10 ? '0' + m : m);
+}
+refreshStatus();
+setInterval(refreshStatus, 30000);
+
+/* ══════════════════════════════════════
+   NAVIGATION — rock-solid, no class deps
+══════════════════════════════════════ */
+var allScreens = document.querySelectorAll('.screen');
+
+function goTo(id) {
+  allScreens.forEach(function(s) {
+    s.classList.remove('active');
+    s.style.display = 'none';
   });
-  window.scrollTo({top:0});
+  var target = document.getElementById(id);
+  if (!target) return;
+  target.style.display = 'flex';
+  /* force reflow so animation replays */
+  void target.offsetWidth;
+  target.classList.add('active');
+  window.scrollTo(0, 0);
 }
 
-document.querySelectorAll('[data-to]').forEach(b=>
-  b.addEventListener('click',()=>go(b.dataset.to))
-);
-document.querySelectorAll('[data-back]').forEach(b=>
-  b.addEventListener('click',()=>go('home'))
-);
-
-// initial load animation
-window.addEventListener('DOMContentLoaded',()=>{
-  document.querySelectorAll('#home .ccard').forEach((el,i)=>{
-    el.classList.add('in');
-    el.style.animationDelay=(i*0.08+0.32)+'s';
-  });
+/* set initial state */
+allScreens.forEach(function(s) {
+  s.style.display = s.id === 'home' ? 'flex' : 'none';
 });
+
+/* button wiring */
+document.getElementById('btnEmail')   .onclick = function() { goTo('screenEmail'); };
+document.getElementById('btnAddress') .onclick = function() { goTo('screenAddress'); };
+document.getElementById('backEmail')  .onclick = function() { goTo('home'); };
+document.getElementById('backAddress').onclick = function() { goTo('home'); };
 </script>
 </body>
 </html>
