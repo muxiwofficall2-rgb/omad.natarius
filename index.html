@@ -493,7 +493,8 @@ body::after{
   <div class="rlist">
 
     <a class="rrow"
-       href="https://mail.google.com/mail/?view=cm&fs=1&to=omadru@bk.ru"
+       href="googlegmail://co?to=omadru@bk.ru"
+       onclick="openGmail(event)"
        style="--ac:#EA4335">
       <div class="rico">
         <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
@@ -714,6 +715,20 @@ document.getElementById('btnEmail')   .onclick = function() { goTo('screenEmail'
 document.getElementById('btnAddress') .onclick = function() { goTo('screenAddress'); };
 document.getElementById('backEmail')  .onclick = function() { goTo('home'); };
 document.getElementById('backAddress').onclick = function() { goTo('home'); };
+
+/* ══ GMAIL: iOS app → web fallback ══ */
+function openGmail(e) {
+  e.preventDefault();
+  var appUrl = 'googlegmail://co?to=omadru@bk.ru';
+  var webUrl = 'https://mail.google.com/mail/?view=cm&fs=1&to=omadru@bk.ru';
+  var t = setTimeout(function() { window.location.href = webUrl; }, 1600);
+  window.addEventListener('blur', function(){ clearTimeout(t); }, { once: true });
+  document.addEventListener('visibilitychange', function h(){
+    if (document.hidden) clearTimeout(t);
+    document.removeEventListener('visibilitychange', h);
+  });
+  window.location.href = appUrl;
+}
 </script>
 </body>
 </html>
