@@ -3,485 +3,487 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
-<meta name="theme-color" content="#03050B"/>
+<meta name="theme-color" content="#04050D"/>
 <title>Копицентр</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ══ RESET ══ */
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
 html,body{min-height:100%;overflow-x:hidden}
-
 body{
-  font-family:'Inter',sans-serif;
-  background:#03050B;
-  color:#E8EDF5;
-  display:flex;
-  justify-content:center;
+  font-family:'Inter',system-ui,sans-serif;
+  color:#F0F4FF;
+  display:flex;justify-content:center;
+  background:#04050D;
 }
 
-/* dot grid */
-body::before{
-  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:radial-gradient(rgba(255,255,255,.04) 1px,transparent 1px);
-  background-size:26px 26px;
-  mask-image:radial-gradient(ellipse 80% 90% at 50% 40%,#000 20%,transparent 100%);
-  -webkit-mask-image:radial-gradient(ellipse 80% 90% at 50% 40%,#000 20%,transparent 100%);
-}
-/* single ambient glow */
-body::after{
-  content:'';position:fixed;
-  width:580px;height:380px;
-  top:-60px;left:50%;transform:translateX(-50%);
-  background:radial-gradient(ellipse,rgba(29,78,216,.16),transparent 68%);
-  filter:blur(55px);z-index:0;pointer-events:none;
-}
+/* ══ ANIMATED DEEP AURORA ══ */
+.aurora{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.orb{position:absolute;border-radius:50%;filter:blur(80px)}
+.orb1{width:500px;height:500px;background:radial-gradient(circle,rgba(37,99,235,.40),transparent 68%);top:-180px;left:-130px;animation:a1 12s ease-in-out infinite alternate}
+.orb2{width:440px;height:440px;background:radial-gradient(circle,rgba(109,40,217,.35),transparent 68%);bottom:-150px;right:-100px;animation:a2 14s ease-in-out infinite alternate}
+.orb3{width:320px;height:320px;background:radial-gradient(circle,rgba(6,182,212,.22),transparent 68%);top:36%;left:48%;transform:translateX(-50%);animation:a3 10s ease-in-out infinite alternate}
+.orb4{width:260px;height:260px;background:radial-gradient(circle,rgba(124,58,237,.20),transparent 68%);top:12%;right:-50px;animation:a4 16s ease-in-out infinite alternate}
+@keyframes a1{to{transform:translate(40px,55px) scale(1.12)}}
+@keyframes a2{to{transform:translate(-45px,-40px) scale(1.10)}}
+@keyframes a3{to{transform:translateX(-50%) scale(1.20)}}
+@keyframes a4{to{transform:translate(-35px,45px)}}
 
-/* ══ SHELL ══ */
-.app{
-  position:relative;z-index:2;
-  width:100%;max-width:430px;
-  min-height:100vh;
-  padding-bottom:60px;
-}
+/* ══ APP ══ */
+.app{position:relative;z-index:1;width:100%;max-width:430px;min-height:100vh;padding-bottom:64px}
 
-/* ══════════════════════════════════════
-   SCREEN SYSTEM — stable, CSS-only fade
-══════════════════════════════════════ */
-.screen{
-  display:none;
-  flex-direction:column;
-}
-.screen.active{
-  display:flex;
-  animation:pgIn .35s ease both;
-}
-@keyframes pgIn{
-  from{opacity:0;transform:translateY(12px)}
-  to{opacity:1;transform:translateY(0)}
-}
+/* ══ SCREENS ══ */
+.screen{display:none;flex-direction:column}
+.screen.active{display:flex;animation:sIn .34s cubic-bezier(.25,.9,.4,1) both}
+@keyframes sIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-/*
-  CRITICAL FIX:
-  Cards & rows are ALWAYS visible (opacity:1).
-  When inside .screen.active they get a stagger animation
-  but they're never opacity:0 in a resting state.
-*/
-.cc, .rrow{
-  opacity:1; /* always visible */
-}
+/* ══ HEADER ══ */
+.header{padding:58px 22px 24px}
 
-/* stagger only while screen is animating in */
-.screen.active .cc:nth-child(1){ animation:cIn .45s .05s ease both }
-.screen.active .cc:nth-child(2){ animation:cIn .45s .12s ease both }
-.screen.active .cc:nth-child(3){ animation:cIn .45s .19s ease both }
-.screen.active .cc:nth-child(4){ animation:cIn .45s .26s ease both }
-.screen.active .cc:nth-child(5){ animation:cIn .45s .33s ease both }
-.screen.active .cc:nth-child(6){ animation:cIn .45s .40s ease both }
-
-.screen.active .rlist .rrow:nth-child(1){ animation:cIn .42s .08s ease both }
-.screen.active .rlist .rrow:nth-child(2){ animation:cIn .42s .16s ease both }
-.screen.active .rlist .rrow:nth-child(3){ animation:cIn .42s .24s ease both }
-
-@keyframes cIn{
-  from{opacity:0;transform:translateY(16px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-/* ══ HERO ══ */
-.hero{
-  padding:52px 22px 26px;
-  display:flex;flex-direction:column;
-  align-items:flex-start;
-}
-
-/* status badge */
-.status-wrap{display:flex;align-items:center;gap:9px;margin-bottom:7px;}
-.sbadge{
+.status-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.badge{
   display:inline-flex;align-items:center;gap:7px;
-  border-radius:100px;padding:5px 13px 5px 9px;
-  font-size:12px;font-weight:500;letter-spacing:.2px;
+  padding:5px 13px 5px 9px;border-radius:100px;
+  font-size:12.5px;font-weight:600;
 }
-.sbadge.open{
-  background:rgba(16,185,129,.11);
-  border:1px solid rgba(16,185,129,.24);
-  color:#34D399;
-}
-.sbadge.closed{
-  background:rgba(239,68,68,.10);
-  border:1px solid rgba(239,68,68,.22);
-  color:#F87171;
-}
-.sdot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
-.sbadge.open .sdot{
-  background:#10B981;
-  box-shadow:0 0 0 3px rgba(16,185,129,.2);
-  animation:pulse 2.2s ease-in-out infinite;
-}
-.sbadge.closed .sdot{background:#EF4444;}
-@keyframes pulse{
-  0%,100%{box-shadow:0 0 0 3px rgba(16,185,129,.2)}
-  50%{box-shadow:0 0 0 5px rgba(16,185,129,.04)}
-}
-.stime{font-size:11.5px;color:#1E2C42;}
+.badge.open{background:rgba(52,199,89,.13);border:1px solid rgba(52,199,89,.28);color:#4ADE80}
+.badge.closed{background:rgba(255,59,48,.11);border:1px solid rgba(255,59,48,.26);color:#F87171}
+.bdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.badge.open .bdot{background:#34C759;box-shadow:0 0 0 3px rgba(52,199,89,.22);animation:bpls 2.2s ease-in-out infinite}
+.badge.closed .bdot{background:#FF3B30}
+@keyframes bpls{0%,100%{box-shadow:0 0 0 3px rgba(52,199,89,.22)}50%{box-shadow:0 0 0 6px rgba(52,199,89,.04)}}
 
-/* city */
-.city{
-  font-size:10.5px;letter-spacing:2.5px;
-  color:#1A2236;text-transform:uppercase;
-  font-weight:500;margin-bottom:20px;
-}
+.hours{font-size:12px;font-weight:500;color:rgba(148,163,184,.55);letter-spacing:.2px}
 
-.hero-title{
-  font-family:'Space Grotesk',sans-serif;
-  font-size:42px;font-weight:700;letter-spacing:-1.5px;line-height:1.04;
-  color:#EDF1F8;margin-bottom:14px;
-}
-.hero-title .ac{
-  background:linear-gradient(100deg,#60A5FA,#A78BFA);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-}
-.hero-sub{
-  font-size:13.5px;line-height:1.65;
-  color:#2D3A52;max-width:290px;
-}
+.city{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(148,163,184,.32);margin-bottom:22px;font-weight:500}
 
-/* ══ SECTION HEAD ══ */
-.sh{
-  display:flex;align-items:center;gap:12px;
-  padding:22px 22px 14px;
-}
-.sh span{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#172030;font-weight:600;}
-.sh::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.04);}
+.h-title{font-family:'Space Grotesk',sans-serif;font-size:42px;font-weight:700;letter-spacing:-1.3px;line-height:1.04;color:#F0F4FF;margin-bottom:13px}
+.h-title em{font-style:normal;background:linear-gradient(105deg,#60A5FA,#818CF8 50%,#C084FC);-webkit-background-clip:text;background-clip:text;color:transparent}
+.h-sub{font-size:14px;color:rgba(148,163,184,.52);line-height:1.65;max-width:290px}
 
-/* ══ CONTACT GRID ══ */
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  padding:0 14px;
-}
+/* ══ SECTION LABEL ══ */
+.slabel{padding:22px 22px 10px;font-size:10.5px;letter-spacing:3.5px;text-transform:uppercase;color:rgba(100,116,139,.50);font-weight:600}
 
-.cc{
-  position:relative;overflow:hidden;
+/* ══ GLASS LIST ══ */
+.clist{
+  margin:0 14px;
+  background:rgba(255,255,255,.048);
+  border:1px solid rgba(255,255,255,.088);
+  border-radius:22px;overflow:hidden;
   display:flex;flex-direction:column;
-  padding:20px 17px 18px;
-  border-radius:17px;
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.07);
-  text-decoration:none;color:#E8EDF5;
-  cursor:pointer;font-family:inherit;
-  transition:background .2s,border-color .2s,transform .15s;
+  backdrop-filter:blur(28px) saturate(180%);
+  -webkit-backdrop-filter:blur(28px) saturate(180%);
+  box-shadow:0 0 0 .5px rgba(255,255,255,.06) inset, 0 24px 64px -20px rgba(0,0,0,.55);
 }
-/* colour stripe */
-.cc::before{
-  content:'';
-  position:absolute;top:0;left:0;right:0;height:1.5px;
-  background:var(--stripe);
-  opacity:.7;transition:opacity .25s;
-}
-.cc:hover::before,.cc:focus::before{opacity:1;}
-/* inner gloss */
-.cc::after{
-  content:'';position:absolute;inset:0;border-radius:17px;
-  background:linear-gradient(150deg,rgba(255,255,255,.05),transparent 50%);
-  pointer-events:none;
-}
-.cc:hover,.cc:focus{
-  background:rgba(255,255,255,.055);
-  border-color:rgba(255,255,255,.12);
-  outline:none;
-}
-.cc:active{transform:scale(.955);}
 
-.cc-ico{
-  width:46px;height:46px;border-radius:13px;
-  margin-bottom:16px;overflow:hidden;flex-shrink:0;
-  position:relative;z-index:1;
-  box-shadow:0 6px 18px -6px rgba(0,0,0,.6);
+.crow{
+  display:flex;align-items:center;gap:15px;
+  padding:13px 17px 13px 15px;
+  text-decoration:none;color:#F0F4FF;
+  cursor:pointer;font-family:inherit;border:none;
+  background:transparent;width:100%;text-align:left;
+  position:relative;
+  transition:background .13s ease;
 }
-.cc-ico svg{display:block;width:100%;height:100%;}
-.cc-name{
-  font-family:'Space Grotesk',sans-serif;
-  font-size:14.5px;font-weight:600;color:#EDF1F8;
-  position:relative;z-index:1;margin-bottom:4px;
+.crow + .crow::before{
+  content:'';position:absolute;top:0;left:82px;right:0;height:.5px;
+  background:rgba(255,255,255,.065);
 }
-.cc-sub{font-size:10.5px;color:#1E2C42;position:relative;z-index:1;}
+.crow:active,.crow:focus{background:rgba(255,255,255,.072);outline:none}
+
+/* ══ iOS SQUIRCLE ICON ══ */
+.ico{
+  width:54px;height:54px;flex-shrink:0;
+  border-radius:13px;overflow:hidden;
+  box-shadow:
+    0 1.5px 3px rgba(0,0,0,.28),
+    0 5px 16px -3px rgba(0,0,0,.52),
+    0 12px 32px -8px rgba(0,0,0,.38),
+    0 0 0 .5px rgba(255,255,255,.10) inset;
+}
+.ico svg{display:block;width:100%;height:100%}
+
+.cinfo{flex:1;min-width:0}
+.cname{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;color:#F0F4FF;line-height:1.2}
+.csub{font-size:12px;color:rgba(148,163,184,.55);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chev{color:rgba(100,116,139,.45);font-size:20px;flex-shrink:0;font-weight:300;line-height:1}
 
 /* ══ TOPBAR ══ */
-.topbar{
-  display:flex;align-items:center;gap:14px;
-  padding:52px 18px 24px;
+.topbar{display:flex;align-items:center;gap:14px;padding:56px 18px 24px}
+.back-btn{
+  width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+  border-radius:12px;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.09);
+  cursor:pointer;color:rgba(148,163,184,.65);
+  transition:background .15s,transform .12s;
+  backdrop-filter:blur(12px);
 }
-.bk{
-  width:40px;height:40px;
-  display:flex;align-items:center;justify-content:center;
-  border-radius:12px;
-  background:rgba(255,255,255,.045);
-  border:1px solid rgba(255,255,255,.08);
-  cursor:pointer;color:#3D5270;
-  transition:background .2s,transform .15s;
-}
-.bk:active{transform:scale(.9);}
-.bk svg{width:19px;height:19px;display:block;}
-.topbar-ttl{
-  font-family:'Space Grotesk',sans-serif;
-  font-size:18px;font-weight:600;letter-spacing:4px;color:#4A637A;
-}
+.back-btn:active{transform:scale(.9)}
+.back-btn svg{width:19px;height:19px;display:block}
+.topbar-ttl{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;letter-spacing:4.5px;color:rgba(148,163,184,.45)}
 
 /* ══ EMAIL CHIP ══ */
 .echip{
-  margin:0 14px 16px;
-  padding:15px 18px;
-  border-radius:15px;
-  background:rgba(99,102,241,.07);
-  border:1px solid rgba(99,102,241,.16);
-  display:flex;align-items:center;gap:13px;
+  margin:0 14px 14px;padding:16px 18px;border-radius:17px;
+  background:rgba(99,102,241,.09);border:1px solid rgba(99,102,241,.18);
+  display:flex;align-items:center;gap:14px;
+  backdrop-filter:blur(18px);
 }
 .echip-ico{
-  width:38px;height:38px;flex-shrink:0;
-  border-radius:10px;
-  background:rgba(99,102,241,.12);
-  border:1px solid rgba(99,102,241,.2);
+  width:40px;height:40px;flex-shrink:0;border-radius:11px;
+  background:rgba(99,102,241,.14);border:1px solid rgba(99,102,241,.24);
   display:flex;align-items:center;justify-content:center;
 }
-.echip-ico svg{width:18px;height:18px;}
-.echip-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#1E2C42;margin-bottom:3px;}
-.echip-val{
-  font-family:'Space Grotesk',sans-serif;
-  font-size:14px;font-weight:600;color:#C7D2FE;letter-spacing:.3px;
-}
+.echip-ico svg{width:18px;height:18px}
+.echip-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(148,163,184,.38);margin-bottom:3px}
+.echip-val{font-family:'Space Grotesk',sans-serif;font-size:14.5px;font-weight:600;color:#C7D2FE;letter-spacing:.3px}
 
 /* ══ ADDRESS CARD ══ */
 .acard{
-  margin:0 14px 16px;
-  padding:20px;border-radius:16px;
-  background:rgba(255,255,255,.028);
-  border:1px solid rgba(255,255,255,.07);
+  margin:0 14px 14px;padding:21px;border-radius:19px;
+  background:rgba(255,255,255,.046);border:1px solid rgba(255,255,255,.085);
   position:relative;overflow:hidden;
+  backdrop-filter:blur(22px);
+  box-shadow:0 0 0 .5px rgba(255,255,255,.06) inset;
 }
 .acard::before{
   content:'';position:absolute;top:0;left:0;right:0;height:1.5px;
-  background:linear-gradient(90deg,transparent,#A855F7 40%,#EC4899 60%,transparent);
-  opacity:.7;
+  background:linear-gradient(90deg,transparent,#A855F7 35%,#EC4899 65%,transparent);opacity:.8;
 }
-.acard-city{font-size:10px;letter-spacing:2.5px;color:#1A2236;text-transform:uppercase;margin-bottom:10px;font-weight:500;}
+.acard-city{font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(148,163,184,.35);margin-bottom:11px;font-weight:500}
 .acard-street{
-  font-family:'Space Grotesk',sans-serif;
-  font-size:18px;font-weight:600;line-height:1.5;
-  background:linear-gradient(110deg,#CBD5E1 20%,#94A3B8 45%,#E2E8F0 70%);
-  background-size:200%;
-  -webkit-background-clip:text;background-clip:text;color:transparent;
+  font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:600;line-height:1.5;
+  background:linear-gradient(110deg,#E2E8F0 18%,#94A3B8 45%,#F1F5FF 72%);
+  background-size:200%;-webkit-background-clip:text;background-clip:text;color:transparent;
   animation:sh 7s linear infinite;
 }
 @keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.acard-extra{margin-top:8px;font-size:12px;color:#1E2C42;}
-
-/* ══ LIST ROWS ══ */
-.rlist{display:flex;flex-direction:column;gap:8px;padding:0 14px;}
-.rrow{
-  display:flex;align-items:center;gap:14px;
-  padding:14px 15px;
-  border-radius:15px;
-  background:rgba(255,255,255,.028);
-  border:1px solid rgba(255,255,255,.065);
-  text-decoration:none;color:#E8EDF5;
-  position:relative;overflow:hidden;
-  transition:background .2s,border-color .2s,transform .15s;
-}
-.rrow::before{
-  content:'';position:absolute;
-  left:0;top:14px;bottom:14px;width:2px;border-radius:2px;
-  background:var(--ac,#3B82F6);
-  opacity:0;transition:opacity .2s;
-}
-.rrow:hover::before,.rrow:focus::before{opacity:.8;}
-.rrow:hover,.rrow:focus{
-  background:rgba(255,255,255,.05);
-  border-color:rgba(255,255,255,.12);
-  outline:none;
-}
-.rrow:active{transform:scale(.972);}
-
-.rico{width:46px;height:46px;flex-shrink:0;border-radius:13px;overflow:hidden;box-shadow:0 5px 14px -5px rgba(0,0,0,.55);}
-.rico svg{display:block;width:100%;height:100%;}
-.rinfo{flex:1;}
-.rinfo b{display:block;font-size:15px;font-weight:600;color:#EDF1F8;}
-.rinfo small{display:block;font-size:11.5px;color:#1E2C42;margin-top:2px;}
-.rarr{
-  width:28px;height:28px;
-  display:flex;align-items:center;justify-content:center;
-  border-radius:8px;
-  background:rgba(255,255,255,.045);
-  border:1px solid rgba(255,255,255,.07);
-  color:#253348;flex-shrink:0;
-}
-.rarr svg{width:14px;height:14px;}
+.acard-extra{margin-top:9px;font-size:12.5px;color:rgba(148,163,184,.38)}
 </style>
 </head>
 <body>
+
+<div class="aurora">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+  <div class="orb orb4"></div>
+</div>
+
 <div class="app">
 
-<!-- ═══════════ HOME ═══════════ -->
+<!-- ══════════ HOME ══════════ -->
 <section class="screen active" id="home">
-  <div class="hero">
-
-    <div class="status-wrap">
-      <div class="sbadge closed" id="sbadge">
-        <div class="sdot"></div>
-        <span id="stext">…</span>
+  <div class="header">
+    <div class="status-row">
+      <div class="badge closed" id="badge">
+        <div class="bdot"></div>
+        <span id="btext">…</span>
       </div>
-      <div class="stime" id="stime"></div>
+      <div class="hours">09:00 — 19:00</div>
     </div>
-
     <div class="city">Санкт-Петербург · Копицентр</div>
-    <div class="hero-title">фото<br><span class="ac">и копицентр</span></div>
-    <div class="hero-sub">Выберите удобный мессенджер или способ связи — ответим быстро.</div>
+    <div class="h-title">Печать<br><em>и копии</em></div>
+    <div class="h-sub">Выберите удобный мессенджер или способ связи — ответим быстро.</div>
   </div>
 
-  <div class="sh"><span>Контакты</span></div>
+  <div class="slabel">Контакты</div>
 
-  <div class="grid">
+  <div class="clist">
 
-    <!-- TELEGRAM -->
-    <a class="cc"
-       href="https://t.me/OMAD_TOUR9094"
-       style="--stripe:linear-gradient(90deg,transparent,#29B6F6,transparent)">
-      <div class="cc-ico">
-        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#40C4FF"/><stop offset="1" stop-color="#0288D1"/>
-          </linearGradient></defs>
-          <rect width="46" height="46" rx="13" fill="url(#tg)"/>
-          <path fill="rgba(255,255,255,.13)" d="M0 23C0 10.3 10.3 0 23 0h23v23C46 35.7 35.7 46 23 46H0z"/>
-          <path fill="#fff" d="M10.4 22.7 30.8 14.7c1-.38 1.88.42 1.55 1.76l-3.3 15.6c-.3 1.3-1.1 1.62-2.18 1.02l-6.07-4.47-2.93 2.83c-.38.37-.7.48-1.18.48l.43-6.12 11.1-10.02c.48-.43-.1-.67-.74-.24L14 25.9l-5.96-1.85c-1.3-.4-1.3-1.28.36-1.97z"/>
-        </svg>
-      </div>
-      <div class="cc-name">Telegram</div>
-      <div class="cc-sub">@OMAD_TOUR9094</div>
-    </a>
-
-    <!-- WHATSAPP -->
-    <a class="cc"
-       href="https://wa.me/79811939094"
-       style="--stripe:linear-gradient(90deg,transparent,#25D366,transparent)">
-      <div class="cc-ico">
-        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="wa" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#43E97B"/><stop offset="1" stop-color="#18A83A"/>
-          </linearGradient></defs>
-          <rect width="46" height="46" rx="13" fill="url(#wa)"/>
-          <path fill="rgba(255,255,255,.13)" d="M0 23C0 10.3 10.3 0 23 0h23v23C46 35.7 35.7 46 23 46H0z"/>
-          <path fill="#fff" d="M23 11.5C16.6 11.5 11.5 16.6 11.5 23c0 2.05.56 3.97 1.54 5.63L11.5 34.5l6.07-1.59A11.43 11.43 0 0 0 23 34.5C29.4 34.5 34.5 29.4 34.5 23S29.4 11.5 23 11.5zm0 1.75A9.74 9.74 0 0 1 32.75 23 9.74 9.74 0 0 1 23 32.75c-1.7 0-3.3-.43-4.7-1.2l-.52-.29-3.47.98.95-3.38-.29-.52A9.73 9.73 0 0 1 13.25 23 9.74 9.74 0 0 1 23 13.25zm-3.18 4.57c-.26-.58-.54-.58-.8-.58-.2 0-.44 0-.7.02s-.63.1-.97.47c-.34.37-1.3 1.28-1.3 3.11s1.34 3.6 1.52 3.85c.19.24 2.58 4.1 6.36 5.58 3.13 1.2 3.74.95 4.42.89.67-.06 2.17-.89 2.48-1.75.3-.86.3-1.6.21-1.76-.1-.15-.34-.24-.72-.42-.38-.19-2.23-.9-2.58-1.0-.34-.11-.58-.15-.83.15-.25.3-.96 1-.18 1.21-.2.2-.43.23-.82.08-.38-.15-1.6-.58-3.04-1.87-1.13-.99-1.88-2.22-2.1-2.6-.2-.37-.02-.58.16-.77l.55-.63c.17-.2.22-.37.34-.61l-.47-1.5z"/>
-        </svg>
-      </div>
-      <div class="cc-name">WhatsApp</div>
-      <div class="cc-sub">+7 981 193-90-94</div>
-    </a>
-
-    <!-- MAX -->
-    <a class="cc"
-       href="https://max.ru/u/f9LHodD0cOK9n8SoDUmiSwL3ZdPoLfXFUMcRyl3zgviGR9Z2ZIpgFOK3NmY"
-       style="--stripe:linear-gradient(90deg,transparent,#7B68EE,transparent)">
-      <div class="cc-ico">
-        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+    <!-- ══ TELEGRAM — точная копия: белый фон + синий круг + самолёт ══ -->
+    <a class="crow" href="https://t.me/OMAD_TOUR9094">
+      <div class="ico">
+        <svg viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <linearGradient id="mxbg" x1="0" y1="1" x2="1" y2="0">
-              <stop offset="0" stop-color="#1976D2"/><stop offset=".5" stop-color="#5C6BC0"/><stop offset="1" stop-color="#8E24AA"/>
+            <linearGradient id="tg_bg" x1="0" y1="0" x2=".5" y2="1">
+              <stop offset="0" stop-color="#FFFFFF"/>
+              <stop offset="1" stop-color="#EEF4FF"/>
             </linearGradient>
-            <linearGradient id="mxfg" x1="0" y1="1" x2="1" y2="0">
-              <stop offset="0" stop-color="#64B5F6"/><stop offset="1" stop-color="#CE93D8"/>
+            <!-- subtle rim -->
+            <linearGradient id="tg_rim" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="rgba(200,210,255,.18)"/>
+              <stop offset="1" stop-color="rgba(150,170,220,.22)"/>
             </linearGradient>
           </defs>
-          <rect width="46" height="46" rx="13" fill="url(#mxbg)"/>
-          <path fill="rgba(255,255,255,.12)" d="M0 23C0 10.3 10.3 0 23 0h23v23C46 35.7 35.7 46 23 46H0z"/>
-          <path fill="#fff" d="M23 10.5c-6.9 0-12.5 5.6-12.5 12.5S16.1 35.5 23 35.5c2.5 0 4.83-.72 6.78-1.97l-1.1-4.24A9.96 9.96 0 0 1 23 30.75c-4.28 0-7.75-3.47-7.75-7.75S18.72 15.25 23 15.25 30.75 18.72 30.75 23c0 1.05-.2 2.06-.57 2.98l3.62 1.36A12.47 12.47 0 0 0 35.5 23c0-6.9-5.6-12.5-12.5-12.5z"/>
-          <circle cx="23" cy="23" r="6.5" fill="url(#mxfg)"/>
+          <!-- white squircle bg -->
+          <rect width="54" height="54" rx="13.5" fill="url(#tg_bg)"/>
+          <rect width="54" height="54" rx="13.5" fill="none" stroke="url(#tg_rim)" stroke-width="1"/>
+          <!-- big blue circle (Telegram brand blue) -->
+          <circle cx="27" cy="27" r="20" fill="#37AEE2"/>
+          <!-- subtle inner gradient on circle -->
+          <circle cx="27" cy="27" r="20" fill="url(#tg_circ)"/>
+          <defs>
+            <radialGradient id="tg_circ" cx=".4" cy=".3" r=".7">
+              <stop offset="0" stop-color="rgba(255,255,255,.15)"/>
+              <stop offset="1" stop-color="rgba(0,0,0,.12)"/>
+            </radialGradient>
+          </defs>
+          <!-- WHITE PAPER PLANE — exact Telegram shape -->
+          <path fill="#ffffff" d="
+            M11 26.2
+            L34.8 17.0
+            c1.22-.45 2.28.48 1.82 2.02
+            L32.6 37.3
+            c-.33 1.38-1.20 1.72-2.42 1.06
+            L23.7 33.3
+            L20.5 36.4
+            c-.42.42-.78.54-1.30.54
+            l.46-6.58
+            L33.1 18.6
+            c.52-.46-.11-.72-.82-.25
+            L14.0 29.7
+            L7.6 27.6
+            c-1.38-.43-1.40-1.32.40-2.00 Z
+          "/>
         </svg>
       </div>
-      <div class="cc-name">MAX</div>
-      <div class="cc-sub">Мессенджер</div>
+      <div class="cinfo">
+        <div class="cname">Telegram</div>
+        <div class="csub">@OMAD_TOUR9094</div>
+      </div>
+      <div class="chev">›</div>
     </a>
 
-    <!-- IMO -->
-    <a class="cc"
-       href="https://s.imoim.net/c5zW2V"
-       style="--stripe:linear-gradient(90deg,transparent,#00BCD4,transparent)">
-      <div class="cc-ico">
-        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="im" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#00BCD4"/><stop offset="1" stop-color="#1565C0"/>
-          </linearGradient></defs>
-          <rect width="46" height="46" rx="13" fill="url(#im)"/>
-          <path fill="rgba(255,255,255,.12)" d="M0 23C0 10.3 10.3 0 23 0h23v23C46 35.7 35.7 46 23 46H0z"/>
-          <rect x="9" y="14" width="28" height="17" rx="4" fill="none" stroke="#fff" stroke-width="2"/>
-          <path d="M9.5 14.5 23 22.5 36.5 14.5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-          <path d="M18 31 14 36H28l-4-5" fill="rgba(255,255,255,.35)"/>
+    <!-- ══ WHATSAPP — зелёный фон + белый bubble + телефон ══ -->
+    <a class="crow" href="https://wa.me/79811939094">
+      <div class="ico">
+        <svg viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="wa_bg" x1=".25" y1="0" x2=".75" y2="1">
+              <stop offset="0" stop-color="#5EE87A"/>
+              <stop offset="1" stop-color="#22A940"/>
+            </linearGradient>
+            <radialGradient id="wa_hl" cx=".35" cy=".25" r=".65">
+              <stop offset="0" stop-color="rgba(255,255,255,.22)"/>
+              <stop offset="1" stop-color="rgba(0,0,0,0)"/>
+            </radialGradient>
+          </defs>
+          <rect width="54" height="54" rx="13.5" fill="url(#wa_bg)"/>
+          <rect width="54" height="54" rx="13.5" fill="url(#wa_hl)"/>
+          <!-- WHITE shape: speech bubble outer + phone cutout using evenodd -->
+          <path fill="#ffffff" fill-rule="evenodd" d="
+            M27 9.5
+            C17.56 9.5 9.9 17.16 9.9 26.6
+            C9.9 29.72 10.76 32.64 12.26 35.12
+            L10 44.5
+            L19.66 42.26
+            C22.02 43.56 24.72 44.3 27.6 44.3
+            C37.04 44.3 44.5 36.84 44.5 27.4
+            C44.5 17.96 37.04 10.7 27.6 10.7
+            C27.6 10.7 27.28 9.5 27 9.5 Z
+
+            M21.6 20.5
+            C21.28 19.76 20.92 19.74 20.60 19.72
+            L19.72 19.70
+            C19.40 19.70 18.90 19.82 18.46 20.28
+            C18.02 20.74 16.82 21.84 16.82 24.10
+            C16.82 26.36 18.50 28.54 18.72 28.84
+            C18.94 29.14 21.92 33.98 26.56 35.90
+            C30.40 37.48 31.20 37.18 32.04 37.08
+            C32.88 36.98 34.66 36.00 35.04 34.96
+            C35.42 33.92 35.42 33.04 35.30 32.84
+            C35.18 32.64 34.88 32.52 34.40 32.28
+            C33.92 32.04 31.56 30.86 31.14 30.70
+            C30.72 30.54 30.40 30.46 30.08 30.92
+            C29.76 31.38 28.80 32.58 28.54 32.90
+            C28.28 33.22 28.02 33.26 27.56 33.02
+            C27.10 32.78 25.62 32.28 23.82 30.58
+            C22.42 29.28 21.48 27.70 21.22 27.22
+            C20.96 26.74 21.20 26.48 21.44 26.24
+            L22.12 25.46
+            C22.34 25.20 22.44 24.98 22.60 24.66
+            L22.38 22.98 Z
+          "/>
         </svg>
       </div>
-      <div class="cc-name">imo</div>
-      <div class="cc-sub">Написать сейчас</div>
+      <div class="cinfo">
+        <div class="cname">WhatsApp</div>
+        <div class="csub">+7 981 193-90-94</div>
+      </div>
+      <div class="chev">›</div>
     </a>
 
-    <!-- ПОЧТА -->
-    <button class="cc" id="btnEmail" type="button"
-       style="--stripe:linear-gradient(90deg,transparent,#818CF8,transparent)">
-      <div class="cc-ico">
-        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="ml" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#5C6BC0"/><stop offset="1" stop-color="#8E24AA"/>
-          </linearGradient></defs>
-          <rect width="46" height="46" rx="13" fill="url(#ml)"/>
-          <path fill="rgba(255,255,255,.12)" d="M0 23C0 10.3 10.3 0 23 0h23v23C46 35.7 35.7 46 23 46H0z"/>
-          <rect x="9" y="14" width="28" height="18" rx="3.5" fill="none" stroke="#fff" stroke-width="2"/>
-          <path d="M9.5 14.5 23 24 36.5 14.5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M9.5 31.5 17 25" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="1.5" stroke-linecap="round"/>
-          <path d="M36.5 31.5 29 25" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- ══ MAX — синий→фиолетовый + белое кольцо bubble ══ -->
+    <a class="crow" href="https://max.ru/u/f9LHodD0cOK9n8SoDUmiSwL3ZdPoLfXFUMcRyl3zgviGR9Z2ZIpgFOK3NmY">
+      <div class="ico">
+        <svg viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <!-- blue left → purple right — exactly like image -->
+            <linearGradient id="mx_bg" x1="0" y1=".5" x2="1" y2=".5">
+              <stop offset="0" stop-color="#4F6DF5"/>
+              <stop offset="1" stop-color="#9C4EFA"/>
+            </linearGradient>
+            <radialGradient id="mx_hl" cx=".3" cy=".25" r=".7">
+              <stop offset="0" stop-color="rgba(255,255,255,.18)"/>
+              <stop offset="1" stop-color="rgba(0,0,0,0)"/>
+            </radialGradient>
+          </defs>
+          <rect width="54" height="54" rx="13.5" fill="url(#mx_bg)"/>
+          <rect width="54" height="54" rx="13.5" fill="url(#mx_hl)"/>
+          <!--
+            WHITE shape = large speech bubble ring with tail at bottom-left
+            Outer: large oval ~fills squircle inner area
+            Inner hole: circle (creates the O/ring look)
+            Tail: small pointed bit at bottom
+          -->
+          <path fill="#ffffff" fill-rule="evenodd" d="
+            M27 5.5
+            C14.0 5.5 5.0 14.8 5.0 26.0
+            C5.0 35.8 10.5 43.6 19.0 46.4
+            L15.5 51.5
+            L22.5 47.5
+            C24.0 47.8 25.5 48.0 27.0 48.0
+            C40.0 48.0 49.0 38.5 49.0 26.0
+            C49.0 13.5 39.8 5.5 27.0 5.5 Z
+
+            M27 15.5
+            A11.5 11.5 0 0 0 15.5 27.0
+            A11.5 11.5 0 0 0 27.0 38.5
+            A11.5 11.5 0 0 0 38.5 27.0
+            A11.5 11.5 0 0 0 27.0 15.5 Z
+          "/>
         </svg>
       </div>
-      <div class="cc-name">Почта</div>
-      <div class="cc-sub">omadru@bk.ru</div>
+      <div class="cinfo">
+        <div class="cname">MAX</div>
+        <div class="csub">ВК Мессенджер</div>
+      </div>
+      <div class="chev">›</div>
+    </a>
+
+    <!-- ══ IMO — белый фон + синий bubble stroke + текст imo ══ -->
+    <a class="crow" href="https://s.imoim.net/c5zW2V">
+      <div class="ico">
+        <svg viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="imo_bg" x1=".5" y1="0" x2=".5" y2="1">
+              <stop offset="0" stop-color="#FFFFFF"/>
+              <stop offset="1" stop-color="#F2F5FF"/>
+            </linearGradient>
+            <linearGradient id="imo_rim" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="rgba(180,190,220,.22)"/>
+              <stop offset="1" stop-color="rgba(160,175,210,.28)"/>
+            </linearGradient>
+          </defs>
+          <!-- white squircle bg -->
+          <rect width="54" height="54" rx="13.5" fill="url(#imo_bg)"/>
+          <rect width="54" height="54" rx="13.5" fill="none" stroke="url(#imo_rim)" stroke-width="1"/>
+          <!--
+            BLUE speech bubble stroke (no fill — white shows inside)
+            Same shape as real imo app: rounded rect bubble with tail at bottom-left
+          -->
+          <path
+            fill="none"
+            stroke="#2D5ECC"
+            stroke-width="3.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="
+              M12 13.5
+              C12 10.5 14.5 8 17.5 8
+              H36.5
+              C39.5 8 42 10.5 42 13.5
+              V30
+              C42 33 39.5 35.5 36.5 35.5
+              H22
+              L14 43.5
+              V35.5
+              H17.5
+              C14.5 35.5 12 33 12 30
+              V13.5 Z
+            "
+          />
+          <!-- "imo" text in blue — italic bold -->
+          <text
+            x="27" y="27"
+            font-family="Georgia, 'Times New Roman', serif"
+            font-size="13.5"
+            font-weight="700"
+            font-style="italic"
+            fill="#2D5ECC"
+            text-anchor="middle"
+            dominant-baseline="middle"
+            letter-spacing=".5"
+          >imo</text>
+        </svg>
+      </div>
+      <div class="cinfo">
+        <div class="cname">imo</div>
+        <div class="csub">Написать сейчас</div>
+      </div>
+      <div class="chev">›</div>
+    </a>
+
+    <!-- ══ ПОЧТА ══ -->
+    <button class="crow" id="btnEmail" type="button">
+      <div class="ico">
+        <svg viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="ml_bg" x1=".5" y1="0" x2=".5" y2="1">
+              <stop offset="0" stop-color="#9B6BFF"/><stop offset="1" stop-color="#5B21B6"/>
+            </linearGradient>
+            <radialGradient id="ml_hl" cx=".35" cy=".25" r=".65">
+              <stop offset="0" stop-color="rgba(255,255,255,.20)"/>
+              <stop offset="1" stop-color="rgba(0,0,0,0)"/>
+            </radialGradient>
+          </defs>
+          <rect width="54" height="54" rx="13.5" fill="url(#ml_bg)"/>
+          <rect width="54" height="54" rx="13.5" fill="url(#ml_hl)"/>
+          <rect x="9" y="15" width="36" height="24" rx="3.8" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="2.3"/>
+          <path d="M9 15.5 27 28 45 15.5" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M9 38.5 20.5 28" stroke="rgba(255,255,255,.30)" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M45 38.5 33.5 28" stroke="rgba(255,255,255,.30)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="cinfo">
+        <div class="cname">Почта</div>
+        <div class="csub">omadru@bk.ru</div>
+      </div>
+      <div class="chev">›</div>
     </button>
 
-    <!-- АДРЕС -->
-    <button class="cc" id="btnAddress" type="button"
-       style="--stripe:linear-gradient(90deg,transparent,#E879F9,transparent)">
-      <div class="cc-ico">
-        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="pi" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#9C27B0"/><stop offset="1" stop-color="#E91E63"/>
-          </linearGradient></defs>
-          <rect width="46" height="46" rx="13" fill="url(#pi)"/>
-          <path fill="rgba(255,255,255,.12)" d="M0 23C0 10.3 10.3 0 23 0h23v23C46 35.7 35.7 46 23 46H0z"/>
-          <path fill="#fff" d="M23 9c-5.8 0-10.5 4.7-10.5 10.5 0 7.35 8.7 16.1 9.75 17.05a1.05 1.05 0 0 0 1.5 0C24.8 35.6 33.5 26.85 33.5 19.5 33.5 13.7 28.8 9 23 9zm0 14.25a3.75 3.75 0 1 1 0-7.5 3.75 3.75 0 0 1 0 7.5z"/>
+    <!-- ══ АДРЕС ══ -->
+    <button class="crow" id="btnAddress" type="button">
+      <div class="ico">
+        <svg viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="pi_bg" x1=".5" y1="0" x2=".5" y2="1">
+              <stop offset="0" stop-color="#FF7096"/><stop offset="1" stop-color="#C01858"/>
+            </linearGradient>
+            <radialGradient id="pi_hl" cx=".35" cy=".25" r=".65">
+              <stop offset="0" stop-color="rgba(255,255,255,.22)"/>
+              <stop offset="1" stop-color="rgba(0,0,0,0)"/>
+            </radialGradient>
+          </defs>
+          <rect width="54" height="54" rx="13.5" fill="url(#pi_bg)"/>
+          <rect width="54" height="54" rx="13.5" fill="url(#pi_hl)"/>
+          <path fill="#fff" d="M27 8.5C19.8 8.5 14 14.3 14 21.5c0 9.5 11.5 22 12.2 22.8a1.2 1.2 0 0 0 1.6 0C28.5 43.5 40 31 40 21.5c0-7.2-5.8-13-13-13zm0 18a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
         </svg>
       </div>
-      <div class="cc-name">Адрес</div>
-      <div class="cc-sub">4-я Красноармейская</div>
+      <div class="cinfo">
+        <div class="cname">Адрес</div>
+        <div class="csub">ул. 4-я Красноармейская, дом 3</div>
+      </div>
+      <div class="chev">›</div>
     </button>
 
   </div>
 </section>
 
-<!-- ═══════════ ПОЧТА ═══════════ -->
+<!-- ══════════ ПОЧТА ══════════ -->
 <section class="screen" id="screenEmail">
   <div class="topbar">
-    <button class="bk" id="backEmail" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-           stroke-linecap="round" stroke-linejoin="round">
-        <path d="M15 18l-6-6 6-6"/>
-      </svg>
+    <button class="back-btn" id="backEmail" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
     <div class="topbar-ttl">ПОЧТА</div>
   </div>
-
   <div class="echip">
     <div class="echip-ico">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#818CF8" stroke-width="1.8"
-           stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="4" width="20" height="16" rx="2.5"/>
-        <path d="M2 4.5 12 13 22 4.5"/>
+      <svg viewBox="0 0 24 24" fill="none" stroke="#818CF8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2.5"/><path d="M2 4.5 12 13 22 4.5"/>
       </svg>
     </div>
     <div>
@@ -489,261 +491,213 @@ body::after{
       <div class="echip-val">omadru@bk.ru</div>
     </div>
   </div>
+  <div class="clist">
 
-  <div class="rlist">
-
-    <a class="rrow"
-       href="googlegmail://co?to=omadru@bk.ru"
-       onclick="openGmail(event)"
-       style="--ac:#EA4335">
-      <div class="rico">
-        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
-          <rect width="46" height="46" rx="12" fill="#fff"/>
-          <path fill="#EA4335" d="M9.5 13.5A3 3 0 0 1 12.5 11h21a3 3 0 0 1 3 2.5v2.8L23 26 9.5 16.3z"/>
-          <path fill="#4285F4" d="M9.5 16.3V33a1 1 0 0 0 1 1H15V19.5z"/>
-          <path fill="#34A853" d="M36.5 16.3V33a1 1 0 0 1-1 1H31V19.5z"/>
-          <path fill="#FBBC05" d="M15 34h16V19.5L23 26z"/>
+    <a class="crow" href="googlegmail://co?to=omadru@bk.ru" onclick="openGmail(event)">
+      <div class="ico">
+        <svg viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="gml_sh" x1=".5" y1="0" x2=".5" y2="1">
+              <stop offset="0" stop-color="rgba(255,255,255,.30)"/><stop offset="1" stop-color="rgba(255,255,255,0)"/>
+            </linearGradient>
+          </defs>
+          <rect width="54" height="54" rx="13.5" fill="#fff"/>
+          <path fill="#EA4335" d="M10.5 15.5a3 3 0 0 1 3-3h27a3 3 0 0 1 3 3v3.5L27 30 10.5 19z"/>
+          <path fill="#4285F4" d="M10.5 19v18a1.5 1.5 0 0 0 1.5 1.5H17V22z"/>
+          <path fill="#34A853" d="M43.5 19v18a1.5 1.5 0 0 1-1.5 1.5H37V22z"/>
+          <path fill="#FBBC04" d="M17 38.5h20V22L27 30z"/>
+          <rect width="54" height="24" rx="13.5" fill="url(#gml_sh)"/>
         </svg>
       </div>
-      <div class="rinfo">
-        <b>Gmail</b>
-        <small>Открыть черновик в Gmail</small>
+      <div class="cinfo">
+        <div class="cname">Gmail</div>
+        <div class="csub">Открыть в приложении Gmail</div>
       </div>
-      <div class="rarr">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-             stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-      </div>
+      <div class="chev">›</div>
     </a>
 
-    <a class="rrow"
-       href="mailru://compose?to=omadru@bk.ru"
-       onclick="openMailru(event)"
-       style="--ac:#168DE2">
-      <div class="rico">
-        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="mr" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#1E88E5"/><stop offset="1" stop-color="#0D47A1"/>
-          </linearGradient></defs>
-          <rect width="46" height="46" rx="12" fill="url(#mr)"/>
-          <text x="23" y="31" font-size="22" font-weight="900"
-                font-family="Arial,sans-serif" fill="#fff" text-anchor="middle">@</text>
+    <a class="crow" href="mailru://compose?to=omadru@bk.ru" onclick="openMailru(event)">
+      <div class="ico">
+        <svg viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="mr_bg" x1=".5" y1="0" x2=".5" y2="1">
+              <stop offset="0" stop-color="#3EAAFF"/><stop offset="1" stop-color="#0050CC"/>
+            </linearGradient>
+            <radialGradient id="mr_hl" cx=".35" cy=".25" r=".65">
+              <stop offset="0" stop-color="rgba(255,255,255,.22)"/><stop offset="1" stop-color="rgba(0,0,0,0)"/>
+            </radialGradient>
+          </defs>
+          <rect width="54" height="54" rx="13.5" fill="url(#mr_bg)"/>
+          <rect width="54" height="54" rx="13.5" fill="url(#mr_hl)"/>
+          <text x="27" y="36" font-size="29" font-weight="900" font-family="Arial Black,Arial,sans-serif" fill="#fff" text-anchor="middle">@</text>
         </svg>
       </div>
-      <div class="rinfo">
-        <b>Почта Mail.ru</b>
-        <small>Написать через Mail.ru / BK.ru</small>
+      <div class="cinfo">
+        <div class="cname">Почта Mail.ru</div>
+        <div class="csub">Открыть в приложении</div>
       </div>
-      <div class="rarr">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-             stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-      </div>
+      <div class="chev">›</div>
     </a>
 
-    <a class="rrow"
-       href="mailto:omadru@bk.ru"
-       style="--ac:#818CF8">
-      <div class="rico">
-        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="am" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#818CF8"/><stop offset="1" stop-color="#A78BFA"/>
-          </linearGradient></defs>
-          <rect width="46" height="46" rx="12" fill="#EEF2FF"/>
-          <rect x="9" y="12" width="28" height="22" rx="3.5" fill="#fff" stroke="#E0E7FF" stroke-width="1.2"/>
-          <path d="M9.5 12.5 23 23 36.5 12.5" fill="none"
-                stroke="url(#am)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M9.5 33.5 17 26" fill="none" stroke="#C7D2FE" stroke-width="1.5" stroke-linecap="round"/>
-          <path d="M36.5 33.5 29 26" fill="none" stroke="#C7D2FE" stroke-width="1.5" stroke-linecap="round"/>
+    <a class="crow" href="mailto:omadru@bk.ru">
+      <div class="ico">
+        <svg viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="aml_bg" x1=".5" y1="0" x2=".5" y2="1">
+              <stop offset="0" stop-color="#5ECFFF"/><stop offset="1" stop-color="#007AFF"/>
+            </linearGradient>
+            <radialGradient id="aml_hl" cx=".35" cy=".25" r=".65">
+              <stop offset="0" stop-color="rgba(255,255,255,.22)"/><stop offset="1" stop-color="rgba(0,0,0,0)"/>
+            </radialGradient>
+          </defs>
+          <rect width="54" height="54" rx="13.5" fill="url(#aml_bg)"/>
+          <rect width="54" height="54" rx="13.5" fill="url(#aml_hl)"/>
+          <rect x="9" y="15" width="36" height="24" rx="3.8" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="2.3"/>
+          <path d="M9 15.5 27 28 45 15.5" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M9 38.5 20.5 28" stroke="rgba(255,255,255,.30)" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M45 38.5 33.5 28" stroke="rgba(255,255,255,.30)" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
       </div>
-      <div class="rinfo">
-        <b>Apple Mail</b>
-        <small>Открыть в приложении Почта</small>
+      <div class="cinfo">
+        <div class="cname">Apple Mail</div>
+        <div class="csub">Открыть в приложении Почта</div>
       </div>
-      <div class="rarr">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-             stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-      </div>
+      <div class="chev">›</div>
     </a>
 
   </div>
 </section>
 
-<!-- ═══════════ АДРЕС ═══════════ -->
+<!-- ══════════ АДРЕС ══════════ -->
 <section class="screen" id="screenAddress">
   <div class="topbar">
-    <button class="bk" id="backAddress" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-           stroke-linecap="round" stroke-linejoin="round">
-        <path d="M15 18l-6-6 6-6"/>
-      </svg>
+    <button class="back-btn" id="backAddress" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
     <div class="topbar-ttl">АДРЕС</div>
   </div>
-
   <div class="acard">
     <div class="acard-city">Санкт-Петербург</div>
     <div class="acard-street">ул. 4-я Красноармейская,<br>дом 3</div>
     <div class="acard-extra">Домофон: 22</div>
   </div>
+  <div class="clist">
 
-  <div class="rlist">
-
-    <a class="rrow"
-       href="https://yandex.ru/maps/-/CLaRUCPW"
-       style="--ac:#FC3F1D">
-      <div class="rico">
-        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
-          <rect width="46" height="46" rx="12" fill="#FC3F1D"/>
-          <path fill="rgba(255,255,255,.15)" d="M0 23C0 10.3 10.3 0 23 0h23v23C46 35.7 35.7 46 23 46H0z"/>
-          <path fill="#fff" d="M23 9.5c-5.8 0-10.5 4.7-10.5 10.5 0 7.35 8.7 16.1 9.75 17.05a1.05 1.05 0 0 0 1.5 0C24.8 36.1 33.5 27.35 33.5 20 33.5 14.2 28.8 9.5 23 9.5zm0 14.25a3.75 3.75 0 1 1 0-7.5 3.75 3.75 0 0 1 0 7.5z"/>
+    <a class="crow" href="https://yandex.ru/maps/-/CLaRUCPW">
+      <div class="ico">
+        <svg viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="ya_bg" x1=".5" y1="0" x2=".5" y2="1">
+              <stop offset="0" stop-color="#FF6535"/><stop offset="1" stop-color="#D91921"/>
+            </linearGradient>
+            <radialGradient id="ya_hl" cx=".35" cy=".25" r=".65">
+              <stop offset="0" stop-color="rgba(255,255,255,.22)"/><stop offset="1" stop-color="rgba(0,0,0,0)"/>
+            </radialGradient>
+          </defs>
+          <rect width="54" height="54" rx="13.5" fill="url(#ya_bg)"/>
+          <rect width="54" height="54" rx="13.5" fill="url(#ya_hl)"/>
+          <path fill="#fff" d="M27 8.5C19.8 8.5 14 14.3 14 21.5c0 9.5 11.5 22 12.2 22.8a1.2 1.2 0 0 0 1.6 0C28.5 43.5 40 31 40 21.5c0-7.2-5.8-13-13-13zm0 18a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
         </svg>
       </div>
-      <div class="rinfo">
-        <b>Яндекс Карты</b>
-        <small>Маршрут и навигация</small>
+      <div class="cinfo">
+        <div class="cname">Яндекс Карты</div>
+        <div class="csub">Маршрут и навигация</div>
       </div>
-      <div class="rarr">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-             stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-      </div>
+      <div class="chev">›</div>
     </a>
 
-    <a class="rrow"
-       href="https://maps.apple/p/GQw0MY4gCth._6"
-       style="--ac:#F43F5E">
-      <div class="rico">
-        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="ap" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#FF5252"/><stop offset="1" stop-color="#F43F5E"/>
-          </linearGradient></defs>
-          <rect width="46" height="46" rx="12" fill="#F0F4FF"/>
-          <path d="M7 30 17 17.5 25 23.5 39 9" stroke="#D1D5DB" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          <path fill="url(#ap)" d="M23 11.5c-4.7 0-8.5 3.8-8.5 8.5 0 5.95 6.9 13.3 7.85 14.2a.95.95 0 0 0 1.3 0c.95-.9 7.85-8.25 7.85-14.2 0-4.7-3.8-8.5-8.5-8.5zm0 11.75a3.25 3.25 0 1 1 0-6.5 3.25 3.25 0 0 1 0 6.5z"/>
+    <a class="crow" href="https://maps.apple/p/GQw0MY4gCth._6">
+      <div class="ico">
+        <svg viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="apm_bg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#D4F1C0"/><stop offset="1" stop-color="#B8DCF5"/>
+            </linearGradient>
+            <linearGradient id="apm_pin" x1=".5" y1="0" x2=".5" y2="1">
+              <stop offset="0" stop-color="#FF5F56"/><stop offset="1" stop-color="#C0392B"/>
+            </linearGradient>
+          </defs>
+          <rect width="54" height="54" rx="13.5" fill="url(#apm_bg)"/>
+          <path d="M4 38 17 22 27 30 45 10" stroke="#78C878" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M4 48 19 32 31 40 54 24" stroke="#72B5D8" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <ellipse cx="27" cy="36" rx="5.5" ry="2.2" fill="rgba(0,0,0,.13)"/>
+          <path fill="url(#apm_pin)" d="M27 12c-5.8 0-10.5 4.7-10.5 10.5 0 7.7 8.9 16.2 9.8 17.1a.9.9 0 0 0 1.4 0c.9-.9 9.8-9.4 9.8-17.1C37.5 16.7 32.8 12 27 12z"/>
+          <circle cx="27" cy="22.5" r="4" fill="#fff"/>
+          <rect width="54" height="22" rx="13.5" fill="rgba(255,255,255,.28)"/>
         </svg>
       </div>
-      <div class="rinfo">
-        <b>Apple Карты</b>
-        <small>Открыть в Apple Maps</small>
+      <div class="cinfo">
+        <div class="cname">Apple Карты</div>
+        <div class="csub">Открыть в Apple Maps</div>
       </div>
-      <div class="rarr">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-             stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-      </div>
+      <div class="chev">›</div>
     </a>
 
-    <a class="rrow"
-       href="https://maps.app.goo.gl/FmQcs1UbBJJjGJYE7?g_st=ic"
-       style="--ac:#4285F4">
-      <div class="rico">
-        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
-          <rect width="46" height="46" rx="12" fill="#fff"/>
-          <path fill="#34A853" d="M23 7.5C16.1 7.5 10.5 13.1 10.5 20c0 3.3 1.35 6.35 3.5 8.6L23 24z"/>
-          <path fill="#4285F4" d="M23 7.5c6.9 0 12.5 5.6 12.5 12.5 0 3.3-1.35 6.35-3.5 8.6L23 24z"/>
-          <path fill="#FBBC04" d="M13 28.6c2.15 3.5 5.5 7 8.2 9.6.55.5 1.1 1 1.8 1.5L23 24z"/>
-          <path fill="#EA4335" d="M33 28.6c-2.15 3.5-5.5 7-8.2 9.6-.55.5-1.1 1-1.8 1.5L23 24z"/>
-          <circle cx="23" cy="19.5" r="5.5" fill="#fff"/>
-          <circle cx="23" cy="19.5" r="2.5" fill="#4285F4"/>
+    <a class="crow" href="https://maps.app.goo.gl/FmQcs1UbBJJjGJYE7?g_st=ic">
+      <div class="ico">
+        <svg viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="gm_sh2" x1=".5" y1="0" x2=".5" y2="1">
+              <stop offset="0" stop-color="rgba(255,255,255,.30)"/><stop offset="1" stop-color="rgba(255,255,255,0)"/>
+            </linearGradient>
+          </defs>
+          <rect width="54" height="54" rx="13.5" fill="#fff"/>
+          <path fill="#34A853" d="M27 7C19.0 7 12.5 13.5 12.5 21.5c0 4.8 2.2 9.1 5.6 12.0L27 47l8.9-13.5A14.5 14.5 0 0 0 41.5 21.5C41.5 13.5 35.0 7 27 7z"/>
+          <path fill="#4285F4" d="M27 7c8.0 0 14.5 6.5 14.5 14.5 0 4.8-2.2 9.1-5.6 12.0L27 47V7z"/>
+          <path fill="#FBBC04" d="M12.5 21.5c0 4.8 2.2 9.1 5.6 12.0L27 47l-9-13.5A14.5 14.5 0 0 1 12.5 21.5z"/>
+          <path fill="#EA4335" d="M41.5 21.5c0 4.8-2.2 9.1-5.6 12.0L27 47V33.5A14.5 14.5 0 0 0 41.5 21.5z"/>
+          <circle cx="27" cy="21.5" r="8" fill="#fff"/>
+          <circle cx="27" cy="21.5" r="4.5" fill="#4285F4"/>
+          <rect width="54" height="22" rx="13.5" fill="url(#gm_sh2)"/>
         </svg>
       </div>
-      <div class="rinfo">
-        <b>Google Карты</b>
-        <small>Открыть в Google Maps</small>
+      <div class="cinfo">
+        <div class="cname">Google Карты</div>
+        <div class="csub">Открыть в Google Maps</div>
       </div>
-      <div class="rarr">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-             stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-      </div>
+      <div class="chev">›</div>
     </a>
 
   </div>
 </section>
 
-</div><!-- .app -->
+</div>
 
 <script>
-/* ══════════════════════════════════════
-   WORKING HOURS — Saint Petersburg UTC+3
-══════════════════════════════════════ */
-function spbNow() {
-  var now = new Date();
-  var utc = now.getTime() + now.getTimezoneOffset() * 60000;
-  return new Date(utc + 3 * 3600000);
+/* ── Working Hours SPb UTC+3, 09:00–19:00 ── */
+function spbNow(){var n=new Date();return new Date(n.getTime()+n.getTimezoneOffset()*60000+10800000);}
+function tick(){
+  var t=spbNow(),h=t.getHours(),m=t.getMinutes(),tot=h*60+m;
+  var open=tot>=540&&tot<1140;
+  var b=document.getElementById('badge');
+  b.className='badge '+(open?'open':'closed');
+  document.getElementById('btext').textContent=open?'Открыто':'Закрыто';
 }
-function refreshStatus() {
-  var t   = spbNow();
-  var h   = t.getHours();
-  var m   = t.getMinutes();
-  var tot = h * 60 + m;
-  var open = (tot >= 9 * 60) && (tot < 19 * 60 + 30);
+tick();setInterval(tick,60000);
 
-  var badge = document.getElementById('sbadge');
-  var txt   = document.getElementById('stext');
-  var tim   = document.getElementById('stime');
-
-  badge.className = 'sbadge ' + (open ? 'open' : 'closed');
-  txt.textContent = open ? 'Открыто' : 'Закрыто';
-  tim.textContent = (h < 10 ? '0' + h : h) + ':' + (m < 10 ? '0' + m : m);
+/* ── Navigation ── */
+var screens=document.querySelectorAll('.screen');
+function go(id){
+  screens.forEach(function(s){s.classList.remove('active');s.style.display='none';});
+  var t=document.getElementById(id);
+  t.style.display='flex';void t.offsetWidth;t.classList.add('active');window.scrollTo(0,0);
 }
-refreshStatus();
-setInterval(refreshStatus, 30000);
+screens.forEach(function(s){s.style.display=s.id==='home'?'flex':'none';});
+document.getElementById('btnEmail').onclick=function(){go('screenEmail');};
+document.getElementById('btnAddress').onclick=function(){go('screenAddress');};
+document.getElementById('backEmail').onclick=function(){go('home');};
+document.getElementById('backAddress').onclick=function(){go('home');};
 
-/* ══════════════════════════════════════
-   NAVIGATION — rock-solid, no class deps
-══════════════════════════════════════ */
-var allScreens = document.querySelectorAll('.screen');
-
-function goTo(id) {
-  allScreens.forEach(function(s) {
-    s.classList.remove('active');
-    s.style.display = 'none';
-  });
-  var target = document.getElementById(id);
-  if (!target) return;
-  target.style.display = 'flex';
-  /* force reflow so animation replays */
-  void target.offsetWidth;
-  target.classList.add('active');
-  window.scrollTo(0, 0);
-}
-
-/* set initial state */
-allScreens.forEach(function(s) {
-  s.style.display = s.id === 'home' ? 'flex' : 'none';
-});
-
-/* button wiring */
-document.getElementById('btnEmail')   .onclick = function() { goTo('screenEmail'); };
-document.getElementById('btnAddress') .onclick = function() { goTo('screenAddress'); };
-document.getElementById('backEmail')  .onclick = function() { goTo('home'); };
-document.getElementById('backAddress').onclick = function() { goTo('home'); };
-
-/* ══ GMAIL: iOS app → web fallback ══ */
-function openGmail(e) {
+/* ── Deep Links ── */
+function dl(e,app,web){
   e.preventDefault();
-  var appUrl = 'googlegmail://co?to=omadru@bk.ru';
-  var webUrl = 'https://mail.google.com/mail/?view=cm&fs=1&to=omadru@bk.ru';
-  var t = setTimeout(function() { window.location.href = webUrl; }, 1600);
-  window.addEventListener('blur', function(){ clearTimeout(t); }, { once: true });
-  document.addEventListener('visibilitychange', function h(){
-    if (document.hidden) clearTimeout(t);
-    document.removeEventListener('visibilitychange', h);
-  });
-  window.location.href = appUrl;
+  var timer=setTimeout(function(){window.location.href=web;},1600);
+  window.addEventListener('blur',function(){clearTimeout(timer);},{once:true});
+  document.addEventListener('visibilitychange',function h(){if(document.hidden)clearTimeout(timer);document.removeEventListener('visibilitychange',h);});
+  window.location.href=app;
 }
-
-/* ══ MAIL.RU: iOS app → web fallback ══ */
-function openMailru(e) {
-  e.preventDefault();
-  var appUrl = 'mailru://compose?to=omadru@bk.ru';
-  var webUrl = 'https://e.mail.ru/compose/?mailto=omadru@bk.ru';
-  var t = setTimeout(function() { window.location.href = webUrl; }, 1600);
-  window.addEventListener('blur', function(){ clearTimeout(t); }, { once: true });
-  document.addEventListener('visibilitychange', function h(){
-    if (document.hidden) clearTimeout(t);
-    document.removeEventListener('visibilitychange', h);
-  });
-  window.location.href = appUrl;
-}
+function openGmail(e){dl(e,'googlegmail://co?to=omadru@bk.ru','https://mail.google.com/mail/?view=cm&fs=1&to=omadru@bk.ru');}
+function openMailru(e){dl(e,'mailru://compose?to=omadru@bk.ru','https://e.mail.ru/compose/?mailto=omadru@bk.ru');}
 </script>
 </body>
 </html>
