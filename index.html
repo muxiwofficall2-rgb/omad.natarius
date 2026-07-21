@@ -36,10 +36,8 @@
     flex-direction:column;
     padding:18px 18px 28px;
     overflow-y:auto;
-    animation:slideIn .38s ease;
   }
   .screen.active{display:flex;}
-  @keyframes slideIn{from{opacity:0; transform:translateX(24px);} to{opacity:1; transform:translateX(0);}}
 
   .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;min-height:40px;}
   .topbar .spacer{flex:1;}
@@ -70,7 +68,7 @@
     overflow:hidden;border:2px solid rgba(255,255,255,.35);
     box-shadow:0 8px 26px rgba(0,0,0,.35);
     background:#fff;display:flex;align-items:center;justify-content:center;
-    padding:14px;
+    padding:6px;
   }
   .logo-circle img{width:100%;height:100%;object-fit:contain;}
 
@@ -472,7 +470,6 @@ function screenHTML(name, opts){
     case "calendar": return calendarScreen(opts);
     case "contact": return contactScreen(opts);
     case "viza": return vizaScreen();
-    case "vizaFrame": return vizaFrameScreen();
     case "notarial": return notarialScreen();
     case "groups": return groupsScreen();
     case "addresses": return addressesScreen();
@@ -565,7 +562,7 @@ function otherCountryScreen(opts){
 }
 
 function daysInMonth(y,m){ return new Date(y, m+1, 0).getDate(); }
-function calendarScreen(opts){
+function calendarInnerHTML(){
   const y = state.calYear, m = state.calMonth;
   const first = new Date(y,m,1).getDay(); // 0=Sun
   const offset = (first+6)%7; // make Monday first
@@ -580,17 +577,18 @@ function calendarScreen(opts){
     cells += `<div class="cal-day ${isPast?'past':''} ${isSel?'selected':''}" data-day="${d}">${d}</div>`;
   }
   const dow = t('dow').map(d=>`<div class="cal-dow">${d}</div>`).join("");
-  return `<div class="screen active">
-    ${topbar(true)}
-    <h2 class="title">${t('chooseDate')}</h2>
-    <div class="calendar-card">
-      <div class="cal-head">
+  return `<div class="cal-head">
         <button class="cal-nav-btn" id="prevMonth">‹</button>
         <div class="cal-month-label">${t('mon')[m]} ${y}</div>
         <button class="cal-nav-btn" id="nextMonth">›</button>
       </div>
-      <div class="cal-grid">${dow}${cells}</div>
-    </div>
+      <div class="cal-grid">${dow}${cells}</div>`;
+}
+function calendarScreen(opts){
+  return `<div class="screen active">
+    ${topbar(true)}
+    <h2 class="title">${t('chooseDate')}</h2>
+    <div class="calendar-card" id="calCard">${calendarInnerHTML()}</div>
   </div>`;
 }
 
@@ -625,7 +623,7 @@ function vizaScreen(){
     <h2 class="title">${t('viza')}</h2>
     <div class="section-text">${t('vizaText')}</div>
     <div class="list-col">
-      <button class="glass-btn" data-go="vizaFrame">${iconCircle(ICONS.visa)}<span class="label">${t('vizaCheck')}</span></button>
+      <a class="glass-btn" href="${VISA_LINK}">${iconCircle(ICONS.visa)}<span class="label">${t('vizaCheck')}</span></a>
       <a class="glass-btn" href="${VISA_GROUP_LINK}" target="_blank">${iconCircle(ICONS.telegram)}<span class="label">${t('vizaGroup')}</span></a>
     </div>
     <h2 class="title" style="margin-top:20px;">${t('vizaExperts')}</h2>
@@ -636,16 +634,6 @@ function vizaScreen(){
       <a class="glass-btn" href="${VISA_EXPERTS.max}" target="_blank">${iconCircle(ICONS.max)}<span class="label">Max</span></a>
       <a class="glass-btn" href="${telHref(VISA_EXPERTS.call)}">${iconCircle(ICONS.phone)}<span class="label">${t('call')}</span></a>
     </div>
-  </div>`;
-}
-
-function vizaFrameScreen(){
-  return `<div class="screen active" style="padding:12px 0 0;">
-    <div style="padding:0 18px;">${topbar(true)}</div>
-    <div class="iframe-wrap">
-      <iframe src="${VISA_LINK}" title="visa check" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </div>
-    <div class="footer-note" style="padding:0 18px;">${t('vizaFrameNote')}: <a href="${VISA_LINK}" target="_blank" style="color:#cfe0ff;">${VISA_LINK}</a></div>
   </div>`;
 }
 
@@ -760,20 +748,7 @@ function bindEvents(name, opts){
   }
 
   if(name==="calendar"){
-    document.getElementById("prevMonth").addEventListener("click", ()=>{
-      state.calMonth--; if(state.calMonth<0){state.calMonth=11; state.calYear--;}
-      render();
-    });
-    document.getElementById("nextMonth").addEventListener("click", ()=>{
-      state.calMonth++; if(state.calMonth>11){state.calMonth=0; state.calYear++;}
-      render();
-    });
-    document.querySelectorAll(".cal-day:not(.empty):not(.past)").forEach(el=>{
-      el.addEventListener("click", ()=>{
-        state.date = new Date(state.calYear, state.calMonth, parseInt(el.dataset.day));
-        pushScreen("contact", {});
-      });
-    });
+    bindCalendarEvents();
   }
 
   if(name==="help"){
@@ -785,6 +760,26 @@ function bindEvents(name, opts){
       window.location.href = `mailto:${HELP_EMAIL}?subject=${subject}&body=${body}`;
     });
   }
+}
+
+function bindCalendarEvents(){
+  const card = document.getElementById("calCard");
+  card.querySelector("#prevMonth").addEventListener("click", ()=>{
+    state.calMonth--; if(state.calMonth<0){state.calMonth=11; state.calYear--;}
+    card.innerHTML = calendarInnerHTML();
+    bindCalendarEvents();
+  });
+  card.querySelector("#nextMonth").addEventListener("click", ()=>{
+    state.calMonth++; if(state.calMonth>11){state.calMonth=0; state.calYear++;}
+    card.innerHTML = calendarInnerHTML();
+    bindCalendarEvents();
+  });
+  card.querySelectorAll(".cal-day:not(.empty):not(.past)").forEach(el=>{
+    el.addEventListener("click", ()=>{
+      state.date = new Date(state.calYear, state.calMonth, parseInt(el.dataset.day));
+      pushScreen("contact", {});
+    });
+  });
 }
 
 /* ---------------- ANIMATED DOTS BACKGROUND ---------------- */
