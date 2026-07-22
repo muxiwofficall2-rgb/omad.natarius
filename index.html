@@ -23,8 +23,13 @@
   html,body{margin:0;padding:0;height:100%;overflow:hidden;background:var(--bg-1);}
   body{
     color:var(--text);
-    background:radial-gradient(circle at 20% 20%, var(--bg-3), var(--bg-2) 45%, var(--bg-1) 100%);
+    background:
+      radial-gradient(circle at 18% 12%, rgba(30,70,180,.55), transparent 45%),
+      radial-gradient(circle at 85% 85%, rgba(10,30,90,.6), transparent 50%),
+      radial-gradient(circle at 20% 20%, var(--bg-3), var(--bg-2) 45%, var(--bg-1) 100%);
     position:relative;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
   }
   #dots-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;}
 
@@ -65,10 +70,10 @@
   .logo-wrap{display:flex;justify-content:center;margin:6px 0 18px;}
   .logo-circle{
     width:104px;height:104px;border-radius:50%;
-    overflow:hidden;border:2px solid rgba(255,255,255,.35);
+    overflow:hidden;border:3px solid #8c2464;
     box-shadow:0 8px 26px rgba(0,0,0,.35);
     background:#fff;display:flex;align-items:center;justify-content:center;
-    padding:6px;
+    padding:16px;
   }
   .logo-circle img{width:100%;height:100%;object-fit:contain;}
 
@@ -90,7 +95,7 @@
     display:flex;align-items:center;gap:12px;
     cursor:pointer;text-align:left;
     transition:background .15s ease;
-    box-shadow:0 6px 18px rgba(0,0,0,.22);
+    box-shadow:0 6px 20px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.12);
   }
   .glass-btn:active{background:var(--glass-hover);}
   .glass-btn .icon-circle{flex-shrink:0;}
@@ -215,6 +220,10 @@ const T = {
     otherFromLabel:"Iltimos, qayerdan uchmoqchisiz, qo'lda kiriting",
     otherToLabel:"Iltimos, qaysi davlatga bormoqchisiz, qo'lda kiriting",
     otherFromPh:"Masalan: Polsha",
+    aviaMenuText:"Sizga qanday yo'nalish muhim bo'lsa, iltimos tanlang!!",
+    tourServices:"Tur xizmatlari",
+    tourServicesText:"Siz tur xizmatlari bo'limidasiz va bu yerda siz umra safariga tur paketlarini va dunyo bo'ylab tur paketlarini xarid qilishingiz mumkin. Iltimos, pastdagi qulay aloqa bilan bog'laning.",
+    directCall:"To'g'ridan-to'g'ri qo'ng'iroq",
     otherToPh:"Masalan: Istanbul",
     next:"Keyingisi",
     required:"Bu maydonni to'ldirish shart",
@@ -227,11 +236,11 @@ const T = {
     date:"Sana",
     vizaText:"Siz bu bo'limda vizani javobini tekshirishingiz va konsullik savollari uchun Sankt-Peterburg shahridagi O'zbekiston Respublikasi Bosh Konsulxonasining rasmiy telegram guruhiga o'z savol va murojaatlaringizni yuborishingiz mumkin. Shuningdek, anketa to'ldirish bo'yicha mutaxassisimiz bilan bog'lanib, elektron anketa to'ldirish va javoblarni tekshirtirishingiz mumkin.",
     vizaCheck:"Viza javobini aniqlash",
-    vizaGroup:"SPB O'zR Bosh Konsulxonasining rasmiy telegram guruhi",
+    vizaGroup:"O'zbekiston Respublikasining Sankt-Peterburgdagi Bosh Konsulxonasining telegram guruhi ->",
     vizaExperts:"Anketa mutaxassislarimiz",
     call:"Qo'ng'iroq qilish",
     notarialText:"Assalomu alekum! Sizga qanday notarial xizmat kerak? (Pasport tarjimasi, rozilik xati, doverennost, straxovka, DMS, OMS, yuridik yordam, hujjatlar bo'yicha yordam) — kerak bo'lsa quyidagi aloqa raqamlariga murojaat qiling.",
-    groupsText:"Bu yerda aviabiletlar narxini bilib borish uchun va notarial yangiliklarni bilib borish uchun konsullik guruhi ham joylangan.",
+    groupsText:"Bu yerda aviabiletlar narxlarini va konsul guruhiga o'z savollaringizni hamda notarial xizmatdan foydalanish imkoniyatiga egasiz.",
     tgAviaGroup:"Telegram Aviakassa guruhi",
     waAviaGroup:"WhatsApp Aviakassa guruhi",
     consGroup:"O'zR Konsulxonasining rasmiy telegram guruhi",
@@ -269,6 +278,10 @@ const T = {
     otherFromLabel:"Пожалуйста, укажите откуда вы хотите вылететь (введите вручную)",
     otherToLabel:"Пожалуйста, укажите в какую страну вы хотите полететь (введите вручную)",
     otherFromPh:"Например: Польша",
+    aviaMenuText:"Пожалуйста, выберите нужное вам направление!!",
+    tourServices:"Туристические услуги",
+    tourServicesText:"Вы находитесь в разделе туристических услуг, здесь вы можете приобрести туристические пакеты для поездки в умру и туры по всему миру. Пожалуйста, свяжитесь с нами по удобному способу связи ниже.",
+    directCall:"Прямой звонок",
     otherToPh:"Например: Стамбул",
     next:"Далее",
     required:"Это поле обязательно для заполнения",
@@ -285,7 +298,7 @@ const T = {
     vizaExperts:"Наши специалисты по анкетам",
     call:"Позвонить",
     notarialText:"Здравствуйте! Какая нотариальная услуга вам нужна? (перевод паспорта, согласие, доверенность, страховка, ДМС, ОМС, юридическая помощь, помощь с документами) — обратитесь по указанным ниже контактам.",
-    groupsText:"Здесь также размещена группа для отслеживания цен на авиабилеты, нотариальных новостей и консульская группа.",
+    groupsText:"Здесь вы можете узнавать цены на авиабилеты, обращаться с вопросами в консульскую группу, а также пользоваться нотариальными услугами.",
     tgAviaGroup:"Telegram группа Авиакасса",
     waAviaGroup:"WhatsApp группа Авиакасса",
     consGroup:"Официальная telegram-группа Консульства РУз",
@@ -323,6 +336,10 @@ const T = {
     otherFromLabel:"Please enter your departure location manually",
     otherToLabel:"Please enter your destination country manually",
     otherFromPh:"Example: Poland",
+    aviaMenuText:"Please choose whichever route matters to you!!",
+    tourServices:"Tour services",
+    tourServicesText:"You are in the Tour Services section, where you can purchase Umrah tour packages and tour packages around the world. Please get in touch using one of the convenient contact options below.",
+    directCall:"Direct call",
     otherToPh:"Example: Istanbul",
     next:"Next",
     required:"This field is required",
@@ -339,7 +356,7 @@ const T = {
     vizaExperts:"Our form specialists",
     call:"Call",
     notarialText:"Hello! Which notary service do you need? (passport translation, consent letter, power of attorney, insurance, DMS, OMS, legal assistance, help with documents) — please contact us using the details below.",
-    groupsText:"Here you'll also find our group for tracking flight ticket prices, notary news, and the consular group.",
+    groupsText:"Here you can find flight ticket prices, reach the consular group with your questions, and use our notary services.",
     tgAviaGroup:"Telegram Aviakassa group",
     waAviaGroup:"WhatsApp Aviakassa group",
     consGroup:"Official Telegram group of the Uzbekistan Consulate",
@@ -418,6 +435,7 @@ const VISA_LINK = "https://visa.mfa.uz/ruxsat/view";
 const VISA_GROUP_LINK = "https://t.me/+i8I6ByH_CUVhOWQy";
 const VISA_EXPERTS = { whatsapp:"+79379499094", telegram:"@AVIAKASSA9094", imo:"https://s.imoim.net/YjQs3q", max:"https://max.ru/u/f9LHodD0cOJaELTBZjr7sN80Fj00VmAedMQocRbVn-m6rT9ghyijTCqXh-Y", call:"+79379499094" };
 const NOTARIAL_CONTACTS = { whatsapp:"+79516772147", telegram:"@Azazello1989", call:"+79516772147" };
+const TOUR_CONTACTS = { telegram:"@kassauzpiter", whatsapp:"+7 960 258 7430", max:"https://max.ru/u/f9LHodD0cOK2bI0WOsyRYbB6SdG1U7rUqtPR9PKAz2C9N-YCIgtI8ifkbL0", call:"+7 960 258 7430" };
 const GROUP_LINKS = {
   tgAvia:"https://t.me/+OW_pzYSHjIA5NmQy",
   waAvia:"https://chat.whatsapp.com/KgnvfhpMYso6lSX3kbNd4l?mode=gi_t",
@@ -465,6 +483,7 @@ function screenHTML(name, opts){
   switch(name){
     case "home": return homeScreen();
     case "aviaMenu": return aviaMenuScreen();
+    case "tourServices": return tourServicesScreen();
     case "cityStep": return cityStepScreen(opts);
     case "otherCountry": return otherCountryScreen(opts);
     case "calendar": return calendarScreen(opts);
@@ -500,10 +519,12 @@ function aviaMenuScreen(){
   return `<div class="screen active">
     ${topbar(true)}
     <h2 class="title">${t('aviabilet')}</h2>
+    <div class="section-text">${t('aviaMenuText')}</div>
     <div class="menu-list" style="margin-top:6px;">
       <button class="glass-btn" data-go="cityStep" data-direction="ru-uz" data-step="0">${iconCircle(ICONS.plane)}<span class="label">${t('ru_uz')}</span><span class="arrow">→</span></button>
       <button class="glass-btn" data-go="cityStep" data-direction="uz-ru" data-step="0">${iconCircle(ICONS.plane)}<span class="label">${t('uz_ru')}</span><span class="arrow">→</span></button>
       <button class="glass-btn" data-go="otherCountry" data-step="0">${iconCircle(ICONS.plane)}<span class="label">${t('other')}</span><span class="arrow">→</span></button>
+      <button class="glass-btn" data-go="tourServices">${iconCircle(ICONS.plane)}<span class="label">${t('tourServices')}</span><span class="arrow">→</span></button>
     </div>
   </div>`;
 }
@@ -633,6 +654,21 @@ function vizaScreen(){
       <a class="glass-btn" href="${VISA_EXPERTS.imo}" target="_blank">${iconCircle(ICONS.imo)}<span class="label">Imo</span></a>
       <a class="glass-btn" href="${VISA_EXPERTS.max}" target="_blank">${iconCircle(ICONS.max)}<span class="label">Max</span></a>
       <a class="glass-btn" href="${telHref(VISA_EXPERTS.call)}">${iconCircle(ICONS.phone)}<span class="label">${t('call')}</span></a>
+    </div>
+  </div>`;
+}
+
+function tourServicesScreen(){
+  const c = TOUR_CONTACTS;
+  return `<div class="screen active">
+    ${topbar(true)}
+    <h2 class="title">${t('tourServices')}</h2>
+    <div class="section-text">${t('tourServicesText')}</div>
+    <div class="list-col">
+      <a class="glass-btn" href="${tgHref(c.telegram)}" target="_blank">${iconCircle(ICONS.telegram)}<span class="label">Telegram</span></a>
+      <a class="glass-btn" href="${waHref(c.whatsapp)}" target="_blank">${iconCircle(ICONS.whatsapp)}<span class="label">WhatsApp</span></a>
+      <a class="glass-btn" href="${c.max}" target="_blank">${iconCircle(ICONS.max)}<span class="label">Max</span></a>
+      <a class="glass-btn" href="${telHref(c.call)}">${iconCircle(ICONS.phone)}<span class="label">${t('directCall')}</span></a>
     </div>
   </div>`;
 }
